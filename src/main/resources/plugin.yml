@@ -1,0 +1,165 @@
+name: PoteraPvP
+version: 1.0.0
+author: TeamHardcore
+main: de.potera.teamhardcore.Main
+
+depend: [ WorldGuard,WGRegionEvents,ProtocolLib,WorldEdit,FastAsyncWorldEdit,LuckPerms, Multiverse-Core ]
+
+commands:
+  clear:
+  broadcast:
+  chatclear:
+    aliases:
+      - ichatclar
+      - icc
+  rename:
+  relore:
+  bodysee:
+  fakemessage:
+  feed:
+    aliases:
+      - eat
+  fly:
+  gamemode:
+    aliases:
+      - gm
+      - survival
+      - creative
+      - adventure
+      - spectator
+      - gms
+      - gmc
+      - gma
+      - gmsp
+  stack:
+  list:
+  more:
+  teamchat:
+  tpa:
+    aliases:
+      - tpahere
+      - tpaall
+      - tpaccept
+      - tpdeny
+  tpall:
+  tphere:
+  tptop:
+  warp:
+    aliases:
+      - warps
+  spawn:
+    aliases:
+      - setspawn
+  fix:
+    aliases:
+      - bodyfix
+      - repair
+      - reparieren
+      - ifix
+      - itemfix
+  clearlag:
+  god:
+    aliases:
+      - godmode
+      - godmodus
+      - gottmodus
+      - gommemode
+  gc:
+    aliases:
+      - performance
+      - perf
+      - systemhealth
+      - cpu
+  workbench:
+    aliases:
+      - wb
+      - werkbank
+  sudo:
+  giveall:
+  messagespy:
+  kill:
+  random:
+  time:
+    aliases:
+      - zeit
+  msg:
+    aliases:
+      - tell
+      - whisper
+      - t
+      - m
+      - pn
+      - r
+      - reply
+      - antworten
+      - w
+  back:
+  commandspy:
+  countdown:
+  globalmute:
+  head:
+  invsee:
+  stats:
+  shop:
+  settings:
+    aliases:
+      - einstellungen
+  regeln:
+    aliases:
+      - rules
+  vanish:
+  vote:
+  ping:
+  money:
+    aliases:
+      - geld
+      - pay
+  build:
+  fakeentity:
+  home:
+    aliases:
+      - homes
+      - sethome
+      - delhome
+  ams:
+  perks:
+    aliases:
+      - perk
+  mines:
+    aliases:
+      - mine
+      - rankup
+  support:
+  report:
+  roulette:
+    aliases:
+      - roll
+  kit:
+  kits:
+  kitmgr:
+  kitinv:
+  kitpreview:
+  clan:
+    aliases:
+      - c
+  coinflip:
+    aliases:
+      - cf
+  ranking:
+  jackpot:
+    aliases:
+      - pot
+  freeze:
+  combatwall:
+  ignore:
+  pvpshop:
+  reward:
+  kopfgeld:
+  ban:
+  pvp:
+  dailypot:
+  trade:
+  bossegg:
+  afkcheck:
+  warn:
+  delwarn:
