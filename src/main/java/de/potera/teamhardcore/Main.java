@@ -14,11 +14,9 @@ import de.potera.rysefoxx.bossegg.BossEggSerializer;
 import de.potera.rysefoxx.bossegg.listener.BossDamageListener;
 import de.potera.rysefoxx.bossegg.listener.BossDeathListener;
 import de.potera.rysefoxx.bossegg.listener.BossInteractListener;
-import de.potera.rysefoxx.commands.DailyPotCommand;
-import de.potera.rysefoxx.commands.DelWarnCommand;
-import de.potera.rysefoxx.commands.PvPCommand;
-import de.potera.rysefoxx.commands.WarnCommand;
+import de.potera.rysefoxx.commands.*;
 import de.potera.rysefoxx.manager.DailyPotManager;
+import de.potera.rysefoxx.manager.TeamManager;
 import de.potera.rysefoxx.menubuilder.manager.InventoryListener;
 import de.potera.rysefoxx.menubuilder.manager.MenuBuilderPlugin;
 import de.potera.rysefoxx.trade.TradeCommand;
@@ -70,6 +68,7 @@ public class Main extends JavaPlugin {
     private DailyPotManager dailyPotManager;
     private BossEggManager bossEggManager;
     private BossEggAbilities bossEggAbilities;
+    private TeamManager teamManager;
 
     private PunishmentController punishmentController;
 
@@ -156,9 +155,13 @@ public class Main extends JavaPlugin {
         this.tradeManager = new TradeManager();
         this.bossEggManager = new BossEggManager();
         this.bossEggAbilities = new BossEggAbilities();
+        this.teamManager = new TeamManager();
 
         PluginManager pm = Bukkit.getPluginManager();
 
+        getCommand("team").setExecutor(new TeamCommand());
+        getCommand("randomteleport").setExecutor(new RandomTeleportCommand());
+        getCommand("trash").setExecutor(new TrashCommand());
         getCommand("clear").setExecutor(new CommandClear());
         getCommand("broadcast").setExecutor(new CommandBroadcast());
         getCommand("chatclear").setExecutor(new CommandChatclear());
