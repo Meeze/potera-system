@@ -23,6 +23,10 @@ public class InventoryClose implements Listener {
 
         Main.getInstance().getGeneralManager().getPlayersInInvsee().remove(player);
 
+        if (inventory.getTitle().equalsIgnoreCase("§7Deine Enderchest")) {
+            Main.getInstance().getEnderChestManager().getContents().put(player.getUniqueId(), inventory.getContents());
+        }
+
         if (Main.getInstance().getCrateManager().getPlayersInOpening().containsKey(player)) {
             if (player.getOpenInventory().getTopInventory().getName().equals(
                     StringDefaults.INVENTORY_PREFIX + "Crate-Opening")) {

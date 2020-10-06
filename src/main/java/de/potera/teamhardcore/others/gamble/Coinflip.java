@@ -118,12 +118,17 @@ public class Coinflip {
                     if (this.rolls <= 0 && Coinflip.this.inventory.getItem(
                             13).getItemMeta().getDisplayName().equalsIgnoreCase("§a" + winner.getName())) {
 
+                        long coinsToAdd = (winningPrice / 100) * 95;
+                        long casinoTax = (winningPrice / 100) * 5;
+
+                        Main.getInstance().getDailyPotManager().addDeployment(casinoTax);
+
                         for (int i = 0; i < Coinflip.this.entries.size(); i++) {
                             Player self = Coinflip.this.entries.get(i);
                             if (winner == self) {
                                 self.sendMessage(
                                         StringDefaults.CF_PREFIX + "§7Du hast gewonnen! Dir wurden §e" + Util.formatNumber(
-                                                winningPrice) + " Münzen §7gutgeschrieben!");
+                                                coinsToAdd) + " Münzen §7gutgeschrieben!");
                                 self.playSound(self.getLocation(), Sound.LEVEL_UP, 1.0F, 1.0F);
                             } else {
                                 self.sendMessage(

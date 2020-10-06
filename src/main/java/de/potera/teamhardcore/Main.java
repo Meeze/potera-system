@@ -11,18 +11,15 @@ import de.potera.rysefoxx.bossegg.BossEggAbilities;
 import de.potera.rysefoxx.bossegg.BossEggCommand;
 import de.potera.rysefoxx.bossegg.BossEggManager;
 import de.potera.rysefoxx.bossegg.BossEggSerializer;
-import de.potera.rysefoxx.bossegg.listener.BossDamageListener;
-import de.potera.rysefoxx.bossegg.listener.BossDeathListener;
-import de.potera.rysefoxx.bossegg.listener.BossInteractListener;
 import de.potera.rysefoxx.commands.*;
 import de.potera.rysefoxx.manager.DailyPotManager;
+import de.potera.rysefoxx.manager.EnderChestManager;
 import de.potera.rysefoxx.manager.TeamManager;
 import de.potera.rysefoxx.menubuilder.manager.InventoryListener;
 import de.potera.rysefoxx.menubuilder.manager.MenuBuilderPlugin;
 import de.potera.rysefoxx.trade.TradeCommand;
 import de.potera.rysefoxx.trade.TradeManager;
 import de.potera.rysefoxx.utils.HologramAPI;
-import de.potera.rysefoxx.worldguard.WorldGuardListener;
 import de.potera.teamhardcore.commands.*;
 import de.potera.teamhardcore.managers.*;
 import de.potera.teamhardcore.utils.VirtualAnvil;
@@ -32,6 +29,7 @@ import org.apache.logging.log4j.LogManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -69,6 +67,7 @@ public class Main extends JavaPlugin {
     private BossEggManager bossEggManager;
     private BossEggAbilities bossEggAbilities;
     private TeamManager teamManager;
+    private EnderChestManager enderChestManager;
 
     private PunishmentController punishmentController;
 
@@ -92,6 +91,11 @@ public class Main extends JavaPlugin {
         CooldownAPI.saveCooldowns(FILE_COOLDOWNS);
         if (shutdownDirectly) return;
 
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getOpenInventory().getTopInventory() == null) continue;
+            player.closeInventory();
+        }
+
         this.databaseManager.terminate();
         this.amsManager.onDisable();
         this.fakeEntityManager.onDisable();
@@ -102,6 +106,7 @@ public class Main extends JavaPlugin {
         this.combatManager.onDisable();
         this.dailyPotManager.onDisable();
         this.bossEggManager.forceEnd();
+        this.enderChestManager.onDisable();
         FakeMobsPlugin.onDisable(this);
 
 
@@ -156,9 +161,11 @@ public class Main extends JavaPlugin {
         this.bossEggManager = new BossEggManager();
         this.bossEggAbilities = new BossEggAbilities();
         this.teamManager = new TeamManager();
+        this.enderChestManager = new EnderChestManager();
 
         PluginManager pm = Bukkit.getPluginManager();
 
+        getCommand("enderchest").setExecutor(new EnderChestCommand());
         getCommand("team").setExecutor(new TeamCommand());
         getCommand("randomteleport").setExecutor(new RandomTeleportCommand());
         getCommand("trash").setExecutor(new TrashCommand());

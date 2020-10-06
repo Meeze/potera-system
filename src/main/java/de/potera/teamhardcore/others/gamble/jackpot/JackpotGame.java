@@ -199,11 +199,16 @@ public class JackpotGame {
 
                         cancel();
 
+                        long coinsToAdd = (getReward() / 100) * 95;
+                        long casinoTax = (getReward() / 100) * 5;
+
                         Bukkit.broadcastMessage(
                                 StringDefaults.JACKPOT_PREFIX + "§7Der Spieler §e" + entryName + " §7hat den" +
                                         " Jackpot in Höhe von §e§l" + Util.formatNumber(
-                                        getReward()) + "$ §7gewonnen! §8(§e§l" + DECIMAL_FORMAT.format(
+                                        coinsToAdd) + "$ §7gewonnen! §8(§e§l" + DECIMAL_FORMAT.format(
                                         getPercentChance(rndmEntry)) + "%§8)");
+
+                        Main.getInstance().getDailyPotManager().addDeployment(casinoTax);
 
 
                         Player player = Bukkit.getPlayer(rndmEntry.getUuid());
@@ -217,7 +222,7 @@ public class JackpotGame {
 
                         UserCurrency uc = Main.getInstance().getUserManager().getUser(
                                 rndmEntry.getUuid()).getUserCurrency();
-                        uc.addMoney(getReward());
+                        uc.addMoney(coinsToAdd);
 
                         new BukkitRunnable() {
                             @Override
