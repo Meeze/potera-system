@@ -1,5 +1,6 @@
 package de.potera.rysefoxx.commands;
 
+import com.sk89q.worldedit.util.function.LevenshteinDistance;
 import de.potera.rysefoxx.menubuilder.manager.InventoryMenuBuilder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,6 +14,8 @@ public class TrashCommand implements CommandExecutor {
         if (!(sender instanceof Player)) {
             return true;
         }
+
+
         Player player = (Player) sender;
         InventoryMenuBuilder inventoryMenuBuilder = new InventoryMenuBuilder().withSize(9 * 5).withTitle("§7Abfall");
         inventoryMenuBuilder.show(player);

@@ -36,7 +36,7 @@ public class DelWarnCommand implements CommandExecutor {
                 return true;
             }
             if (!Util.isInt(args[1])) {
-                player.sendMessage(StringDefaults.PREFIX + "§7Bitte gibt eine valide Zahl an.");
+                player.sendMessage(StringDefaults.PREFIX + "§7Bitte gibt eine valide Zahl ein!");
                 return true;
             }
             int warnsToRemove = Integer.parseInt(args[1]);

@@ -165,6 +165,7 @@ public class Main extends JavaPlugin {
 
         PluginManager pm = Bukkit.getPluginManager();
 
+        getCommand("teleport").setExecutor(new TeleportCommand());
         getCommand("enderchest").setExecutor(new EnderChestCommand());
         getCommand("team").setExecutor(new TeamCommand());
         getCommand("randomteleport").setExecutor(new RandomTeleportCommand());

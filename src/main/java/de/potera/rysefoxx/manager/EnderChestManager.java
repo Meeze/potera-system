@@ -22,6 +22,7 @@ public class EnderChestManager {
     }
 
     private void load() {
+        if (this.fileBase.getConfig().getKeys(false).isEmpty()) return;
         for (String data : this.fileBase.getConfig().getKeys(false)) {
             ItemStack[] contents = new ItemStack[this.fileBase.getConfig().getList(data + ".enderchest").size()];
             int amount = 0;
