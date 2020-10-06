@@ -224,7 +224,8 @@ public class RouletteGame {
                             Player player = entry.getKey();
                             RouletteEntry rouletteEntry = entry.getValue();
 
-                            long coinsToAdd = (long) (rouletteEntry.getEntry() * rouletteEntry.getMultiplier());
+                            long coinsToAdd = (long) ((rouletteEntry.getEntry() * rouletteEntry.getMultiplier()) / 100 * 95);
+                            long casinoTax = (long) ((rouletteEntry.getEntry() * rouletteEntry.getMultiplier()) / 100 * 5);
 
                             if (player == null) {
                                 UserCurrency opCurrency = Main.getInstance().getUserManager().getUser(
@@ -232,6 +233,8 @@ public class RouletteGame {
                                 opCurrency.addMoney(coinsToAdd);
                                 continue;
                             }
+
+                            Main.getInstance().getDailyPotManager().addDeployment(casinoTax);
 
                             UserCurrency uc = Main.getInstance().getUserManager().getUser(
                                     player.getUniqueId()).getUserCurrency();

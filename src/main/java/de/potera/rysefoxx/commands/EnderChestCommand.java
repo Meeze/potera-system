@@ -39,6 +39,8 @@ public class EnderChestCommand implements CommandExecutor {
             }
             inventoryMenuBuilder.show(player);
         } else if (args.length == 1) {
+            /*
+
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
                 player.sendMessage(StringDefaults.NOT_ONLINE);
@@ -50,6 +52,7 @@ public class EnderChestCommand implements CommandExecutor {
             }
             inventoryMenuBuilder.show(player);
             inventoryMenuBuilder.withEventHandler(event -> event.setCancelled(true));
+             */
 
         }
 

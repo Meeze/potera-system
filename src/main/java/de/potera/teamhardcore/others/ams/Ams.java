@@ -3,7 +3,6 @@ package de.potera.teamhardcore.others.ams;
 import de.potera.teamhardcore.Main;
 import de.potera.teamhardcore.db.TimedDatabaseUpdate;
 import de.potera.teamhardcore.others.ams.upgrades.*;
-import de.potera.teamhardcore.others.ams.upgrades.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

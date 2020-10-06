@@ -1,6 +1,5 @@
 package de.potera.rysefoxx.commands;
 
-import de.potera.rysefoxx.menubuilder.manager.InventoryMenuBuilder;
 import de.potera.teamhardcore.Main;
 import de.potera.teamhardcore.others.TPDelay;
 import de.potera.teamhardcore.utils.StringDefaults;

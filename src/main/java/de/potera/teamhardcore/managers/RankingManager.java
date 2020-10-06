@@ -3,7 +3,6 @@ package de.potera.teamhardcore.managers;
 import de.potera.teamhardcore.Main;
 import de.potera.teamhardcore.others.clan.Clan;
 import de.potera.teamhardcore.utils.*;
-import de.potera.teamhardcore.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;

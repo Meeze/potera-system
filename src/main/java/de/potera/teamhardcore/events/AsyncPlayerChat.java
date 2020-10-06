@@ -9,14 +9,12 @@ import de.potera.teamhardcore.others.clan.Clan;
 import de.potera.teamhardcore.others.clan.ClanMember;
 import de.potera.teamhardcore.users.UserData;
 import de.potera.teamhardcore.utils.StringDefaults;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.*;

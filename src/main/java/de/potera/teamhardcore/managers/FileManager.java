@@ -1,6 +1,5 @@
 package de.potera.teamhardcore.managers;
 
-import de.potera.teamhardcore.files.*;
 import de.potera.teamhardcore.files.ConfigFile;
 import de.potera.teamhardcore.files.FakeEntityFile;
 import de.potera.teamhardcore.files.ShopFile;

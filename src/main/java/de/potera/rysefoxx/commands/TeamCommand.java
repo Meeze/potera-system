@@ -7,7 +7,6 @@ import de.potera.teamhardcore.utils.ItemBuilder;
 import de.potera.teamhardcore.utils.StringDefaults;
 import de.potera.teamhardcore.utils.Util;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

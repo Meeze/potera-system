@@ -2,7 +2,6 @@ package de.potera.klysma.kits.commands;
 
 import de.potera.klysma.kits.Kit;
 import de.potera.klysma.kits.TimeUtils;
-import de.potera.teamhardcore.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
