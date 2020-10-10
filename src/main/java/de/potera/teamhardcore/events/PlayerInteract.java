@@ -15,6 +15,7 @@ import de.tr7zw.nbtapi.NBTItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -32,6 +33,16 @@ public class PlayerInteract implements Listener {
         ItemStack item = event.getItem();
 
         UserData userData = Main.getInstance().getUserManager().getUser(player.getUniqueId()).getUserData();
+
+        if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.ENDER_CHEST) {
+            event.setUseInteractedBlock(Event.Result.DENY);
+            event.setUseItemInHand(Event.Result.DENY);
+            if (!Main.getInstance().getEnderChestManager().isAccessible()) {
+                player.sendMessage(StringDefaults.PREFIX + "Die Enderchests werden gerade geladen.");
+                return;
+            }
+            player.performCommand("/ec");
+        }
 
         if (item == null || item.getType() == Material.AIR) return;
 

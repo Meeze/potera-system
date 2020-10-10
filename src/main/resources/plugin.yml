@@ -6,6 +6,19 @@ main: de.potera.teamhardcore.Main
 depend: [ WorldGuard,WGRegionEvents,ProtocolLib,WorldEdit,FastAsyncWorldEdit,LuckPerms, Multiverse-Core ]
 
 commands:
+  teleport:
+    aliases:
+      - tp
+  enderchest:
+    aliases:
+      - ec
+  team:
+  randomteleport:
+    aliases:
+      - rtp
+  trash:
+    aliases:
+      - abfall
   clear:
   broadcast:
   chatclear:

@@ -79,7 +79,7 @@ public class BossEggCommand implements CommandExecutor {
                     return true;
                 }
                 if (!Util.isInt(args[2])) {
-                    player.sendMessage(StringDefaults.PREFIX + "§7Bitte gib eine gültige Zahl an.");
+                    player.sendMessage(StringDefaults.PREFIX + "§7Bitte gib eine valide Zahl ein!");
                     return true;
                 }
                 BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
@@ -92,7 +92,7 @@ public class BossEggCommand implements CommandExecutor {
                     return true;
                 }
                 if (!Util.isInt(args[2])) {
-                    player.sendMessage(StringDefaults.PREFIX + "§7Bitte gib eine gültige Zahl an.");
+                    player.sendMessage(StringDefaults.PREFIX + "§7Bitte gib eine valide Zahl ein!");
                     return true;
                 }
                 BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
@@ -143,7 +143,7 @@ public class BossEggCommand implements CommandExecutor {
                 try {
                     collection = Integer.parseInt(args[2]);
                 } catch (NumberFormatException exception) {
-                    player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Bitte gib eine gültige Zahl an");
+                    player.sendMessage(StringDefaults.PREFIX + "§7Bitte gib eine valide Zahl ein!");
                     return true;
                 }
                 bossEgg.setCollection(collection);
