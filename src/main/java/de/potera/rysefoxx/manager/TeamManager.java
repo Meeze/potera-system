@@ -2,6 +2,7 @@ package de.potera.rysefoxx.manager;
 
 import de.potera.teamhardcore.files.FileBase;
 import lombok.Getter;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -35,18 +36,20 @@ public class TeamManager {
         return teamRanks == null;
     }
 
-    public boolean inGroup(Player player) {
+    public boolean inGroup(OfflinePlayer player) {
         if (this.fileBase.getConfig().getKeys(false).isEmpty()) return false;
 
         for (String ranks : this.fileBase.getConfig().getKeys(false)) {
             for (String playerNames : this.fileBase.getConfig().getStringList(ranks)) {
-                return playerNames.equalsIgnoreCase(player.getName());
+                if(playerNames.equalsIgnoreCase(player.getName())){
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    public void addPlayer(Player target, TeamRanks teamRanks) {
+    public void addPlayer(OfflinePlayer target, TeamRanks teamRanks) {
         if (teamRanks.equals(TeamRanks.OWNER)) {
             this.owner.add(target.getName());
         } else if (teamRanks.equals(TeamRanks.ADMIN)) {
@@ -67,7 +70,7 @@ public class TeamManager {
         save();
     }
 
-    public void removePlayer(Player target) {
+    public void removePlayer(OfflinePlayer target) {
         this.owner.remove(target.getName());
         this.admin.remove(target.getName());
         this.developer.remove(target.getName());

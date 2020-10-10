@@ -8,6 +8,7 @@ import de.potera.teamhardcore.utils.StringDefaults;
 import de.potera.teamhardcore.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -56,11 +57,7 @@ public class TeamCommand implements CommandExecutor {
                 player.sendMessage(StringDefaults.NO_PERM);
                 return true;
             }
-            Player target = Bukkit.getPlayer(args[1]);
-            if (target == null) {
-                player.sendMessage(StringDefaults.NOT_ONLINE);
-                return true;
-            }
+            OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
             if (args[0].equalsIgnoreCase("add")) {
                 if (Main.getInstance().getTeamManager().inGroup(target)) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieser Spieler befindet sich bereits in einer Gruppe.");
@@ -77,11 +74,7 @@ public class TeamCommand implements CommandExecutor {
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("remove")) {
-                Player target = Bukkit.getPlayer(args[1]);
-                if (target == null) {
-                    player.sendMessage(StringDefaults.NOT_ONLINE);
-                    return true;
-                }
+                OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
                 if (!Main.getInstance().getTeamManager().inGroup(target)) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieser Spieler befindet sich in keiner Gruppe.");
                     return true;
