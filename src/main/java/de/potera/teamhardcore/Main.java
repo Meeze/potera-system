@@ -6,6 +6,9 @@ import de.potera.fakemobs.FakeMobsPlugin;
 import de.potera.klysma.CooldownAPI;
 import de.potera.klysma.kits.commands.*;
 import de.potera.realmeze.punishment.command.BanCommand;
+import de.potera.realmeze.punishment.command.MuteCommand;
+import de.potera.realmeze.punishment.command.UnbanCommand;
+import de.potera.realmeze.punishment.command.UnmuteCommand;
 import de.potera.realmeze.punishment.controller.PunishmentController;
 import de.potera.rysefoxx.bossegg.BossEggAbilities;
 import de.potera.rysefoxx.bossegg.BossEggCommand;
@@ -247,6 +250,9 @@ public class Main extends JavaPlugin {
         getCommand("bossegg").setExecutor(new BossEggCommand());
         getCommand("warn").setExecutor(new WarnCommand());
         getCommand("delwarn").setExecutor(new DelWarnCommand());
+        getCommand("mute").setExecutor(new MuteCommand(getPunishmentController()));
+        getCommand("unban").setExecutor(new UnbanCommand(getPunishmentController()));
+        getCommand("unmute").setExecutor(new UnmuteCommand(getPunishmentController()));
     }
 
     public void shutdownDirectly() {

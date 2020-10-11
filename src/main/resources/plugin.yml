@@ -176,3 +176,8 @@ commands:
   afkcheck:
   warn:
   delwarn:
+  mute:
+  unmute:
+  unban:
+    aliases:
+      - pardon

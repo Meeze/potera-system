@@ -32,6 +32,13 @@ public class AsyncPlayerChat implements PunishListener {
 
         String message = event.getMessage();
 
+
+        if(punishmentController.getPunishment(player.getUniqueId(), PunishmentType.MUTE).isPresent()){
+            player.sendMessage("du bist muted lulw");
+            event.setCancelled(true);
+            return;
+        }
+
         if (message.contains("̇") || message.equalsIgnoreCase("")) {
             event.setCancelled(true);
             return;
@@ -104,10 +111,7 @@ public class AsyncPlayerChat implements PunishListener {
             return;
         }
 
-        punishmentController.getPunishment(player.getUniqueId(), PunishmentType.BAN).ifPresent(punishment -> {
-            player.sendMessage("du bist muted");
-            event.setCancelled(true);
-        });
+
 
         if (!player.hasPermission("potera.settings.bypass")) {
             Set<Player> toRemove = null;
