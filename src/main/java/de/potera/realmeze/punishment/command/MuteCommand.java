@@ -22,7 +22,7 @@ public class MuteCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!command.getName().equalsIgnoreCase("ban")) {
+        if (!command.getName().equalsIgnoreCase("mute")) {
             return false;
         }
         if (!(sender instanceof Player)) {
@@ -53,7 +53,7 @@ public class MuteCommand implements CommandExecutor {
     }
 
     private void showUsage(Player player) {
-        player.sendMessage("USAGE: ban [Player] <time(1h, 1w, perma)> <Reason...>");
+        player.sendMessage("USAGE: mute [Player] <time(1h, 1w, perma)> <Reason...>");
     }
 
     private void mute(Player player, Player receiver, Instant expiresAt, String... reasonArgs) {

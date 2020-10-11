@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -29,6 +30,10 @@ public class AntilagManager {
 
     public boolean isClearable(Entity entity) {
         if (entity instanceof org.bukkit.entity.LivingEntity) {
+            LivingEntity livingEntity = (LivingEntity) entity;
+            if(livingEntity.hasMetadata("BOSS") || livingEntity.hasMetadata("BOSSPART")) {
+                return false;
+            }
             return !(entity instanceof org.bukkit.entity.Tameable) && !(entity instanceof org.bukkit.entity.Player);
         }
         if (entity instanceof Item) {

@@ -13,6 +13,7 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -145,7 +146,7 @@ public class BossEgg {
 
         as.setCustomName(holoText.replace("%health%", String.valueOf(livingEntity.getHealth())).replace("%maxHealth%", String.valueOf(livingEntity.getMaxHealth())));
         as.setCustomNameVisible(true);
-
+        as.setMetadata("BOSSPART", new FixedMetadataValue(Main.getInstance(), "nothing tbh"));
 
         livingEntity.setPassenger(as);
 

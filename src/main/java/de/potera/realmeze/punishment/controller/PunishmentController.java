@@ -1,5 +1,6 @@
 package de.potera.realmeze.punishment.controller;
 
+import de.potera.realmeze.punishment.event.PunishListener;
 import de.potera.realmeze.punishment.model.Punishment;
 import de.potera.realmeze.punishment.model.PunishmentResult;
 import de.potera.realmeze.punishment.model.PunishmentType;
@@ -179,6 +180,27 @@ public class PunishmentController {
                 default:
                     return null;
             }
+        }
+    }
+
+    public boolean unban(OfflinePlayer offlinePlayer) {
+        Optional<Punishment> ban = getPunishment(offlinePlayer.getUniqueId(), PunishmentType.BAN);
+        if(ban.isPresent()){
+            Punishment punish = ban.get();
+            getPunishments().get(offlinePlayer.getUniqueId()).remove(punish);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean unmute(OfflinePlayer offlinePlayer) {
+        Optional<Punishment> mute = getPunishment(offlinePlayer.getUniqueId(), PunishmentType.MUTE);
+        if(mute.isPresent()){
+            Punishment punish = mute.get();
+            getPunishments().get(offlinePlayer.getUniqueId()).remove(punish);
+            return true;
+        } else {
+            return false;
         }
     }
 
