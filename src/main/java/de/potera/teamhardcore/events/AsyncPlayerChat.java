@@ -53,16 +53,10 @@ public class AsyncPlayerChat implements PunishListener {
                 result = StringSimilarity.similarity(msg, badWords);
 
                 //ToDo: Spieler muten
-                if (result >= 0.7) {
+                if (result >= 1) {
                     event.setCancelled(true);
 
-                    //15 min mute
-
-                    break;
-                } else if (result >= 0.8) {
-                    event.setCancelled(true);
-
-                    //20 min mute
+                    //30 Min mute
 
                     break;
                 } else if (result >= 0.9) {
@@ -71,10 +65,17 @@ public class AsyncPlayerChat implements PunishListener {
                     //25 min mute
 
                     break;
-                } else if (result >= 1) {
+                } else if (result >= 0.8) {
                     event.setCancelled(true);
 
-                    //30 Min mute
+                    //20 min mute
+
+
+                    break;
+                } else if (result >= 0.7) {
+                    event.setCancelled(true);
+
+                    //15 min mute
 
                     break;
                 }
