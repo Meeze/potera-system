@@ -53,51 +53,45 @@ public class BossInteractListener implements Listener {
                 return;
             }
 
+            bossEgg.spawn(player, e.getClickedBlock().getX(), e.getClickedBlock().getY() + 1, e.getClickedBlock().getZ());
 
-            if (player.getItemInHand().getType() == Material.DRAGON_EGG && player.getItemInHand().getItemMeta() != null && player.getItemInHand().getItemMeta().getDisplayName() != null && ChatColor.stripColor(player.getItemInHand().getItemMeta().getDisplayName()).contains("Spawn-Ei")) {
-                bossEgg.spawn(player, e.getClickedBlock().getX(), e.getClickedBlock().getY() + 1, e.getClickedBlock().getZ());
+            if (player.getItemInHand().getAmount() > 1) {
+                player.getItemInHand().setAmount(player.getItemInHand().getAmount() - 1);
+            } else {
+                player.getInventory().removeItem(player.getItemInHand());
+            }
 
-                if (player.getItemInHand().getAmount() > 1) {
-                    player.getItemInHand().setAmount(player.getItemInHand().getAmount() - 1);
-                } else {
-                    player.getInventory().removeItem(player.getItemInHand());
-                }
-
-                if (bossEgg.isBroadcastOnSpawn()) {
-                    Bukkit.broadcastMessage("§6§l§k---------------------------");
-                    Bukkit.broadcastMessage("");
-                    Bukkit.broadcastMessage("§c" + player.getName() + " §7hat ein Spawner-Ei aus der §c" + bossEgg.getCollection() + " Kollektion benutzt.");
-                    Bukkit.broadcastMessage("");
-                    Bukkit.broadcastMessage("§7Boss Name§8: §c" + bossEgg.getDisplayName());
-                    Bukkit.broadcastMessage("§7Boss Leben§8: §c" + bossEgg.getMaxHealth());
-                    Bukkit.broadcastMessage("§7X§8: §c" + e.getClickedBlock().getX());
-                    Bukkit.broadcastMessage("§7Y§8: §c" + e.getClickedBlock().getY());
-                    Bukkit.broadcastMessage("§7Z§8: §c" + e.getClickedBlock().getZ());
-                    Bukkit.broadcastMessage("");
-                    Bukkit.broadcastMessage("§6§l§k---------------------------");
-                }
-
+            if (bossEgg.isBroadcastOnSpawn()) {
+                Bukkit.broadcastMessage("§6§l§k---------------------------");
+                Bukkit.broadcastMessage("");
+                Bukkit.broadcastMessage("§c" + player.getName() + " §7hat ein Spawner-Ei aus der §c" + bossEgg.getCollection() + " Kollektion benutzt.");
+                Bukkit.broadcastMessage("");
+                Bukkit.broadcastMessage("§7Boss Name§8: §c" + bossEgg.getDisplayName());
+                Bukkit.broadcastMessage("§7Boss Leben§8: §c" + bossEgg.getMaxHealth());
+                Bukkit.broadcastMessage("§7X§8: §c" + e.getClickedBlock().getX());
+                Bukkit.broadcastMessage("§7Y§8: §c" + e.getClickedBlock().getY());
+                Bukkit.broadcastMessage("§7Z§8: §c" + e.getClickedBlock().getZ());
+                Bukkit.broadcastMessage("");
+                Bukkit.broadcastMessage("§6§l§k---------------------------");
             }
         } else if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
 
-            if (player.getItemInHand().getType() == Material.DRAGON_EGG && player.getItemInHand().getItemMeta() != null && player.getItemInHand().getItemMeta().getDisplayName() != null && ChatColor.stripColor(player.getItemInHand().getItemMeta().getDisplayName()).contains("Spawn-Ei")) {
-                InventoryMenuBuilder inventoryMenuBuilder = new InventoryMenuBuilder().withSize(9 * 6).withTitle("§7BossEgg Informationen");
+            InventoryMenuBuilder inventoryMenuBuilder = new InventoryMenuBuilder().withSize(9 * 6).withTitle("§7BossEgg Informationen");
 
 
-                int index = 0;
-                for (BossEggSerializer bossEggSerializer : bossEgg.getItems()) {
-                    inventoryMenuBuilder.withItem(index, new ItemBuilder(bossEggSerializer.getItemStack().clone()).setDisplayName("§c" + bossEggSerializer.getDisplayName()).setLore(Arrays.asList(
-                            "§7DisplayName §8➡ §c" + bossEggSerializer.getDisplayName(),
-                            "§7Chance §8➡ §c" + bossEggSerializer.getChance() + "%",
-                            "",
-                            "§7Das Item ist schon §c" + Util.formatBigNumber(bossEggSerializer.getAmount()) + "x §7gedroppt.")).build());
-                    index++;
-                }
-
-                inventoryMenuBuilder.withEventHandler(event -> event.setCancelled(true));
-
-                inventoryMenuBuilder.show(player);
+            int index = 0;
+            for (BossEggSerializer bossEggSerializer : bossEgg.getItems()) {
+                inventoryMenuBuilder.withItem(index, new ItemBuilder(bossEggSerializer.getItemStack().clone()).setDisplayName("§c" + bossEggSerializer.getDisplayName()).setLore(Arrays.asList(
+                        "§7DisplayName §8➡ §c" + bossEggSerializer.getDisplayName(),
+                        "§7Chance §8➡ §c" + bossEggSerializer.getChance() + "%",
+                        "",
+                        "§7Das Item ist schon §c" + Util.formatBigNumber(bossEggSerializer.getAmount()) + "x §7gedroppt.")).build());
+                index++;
             }
+
+            inventoryMenuBuilder.withEventHandler(event -> event.setCancelled(true));
+
+            inventoryMenuBuilder.show(player);
         }
 
     }
