@@ -1,6 +1,5 @@
 package de.potera.realmeze.punishment.controller;
 
-import de.potera.realmeze.punishment.event.PunishListener;
 import de.potera.realmeze.punishment.model.Punishment;
 import de.potera.realmeze.punishment.model.PunishmentResult;
 import de.potera.realmeze.punishment.model.PunishmentType;
@@ -14,10 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
@@ -49,17 +45,14 @@ public class PunishmentController {
         return PunishmentResult.SUCCESS;
     }
 
-    private void saveInDatabase(Punishment punishment) {
-        getPunishmentService().save(punishment);
-    }
 
-    public void loadFromDatabase() {
+    public void init() {
         setPunishments(new HashMap<>());
-     //   List<Punishment> loadedPunishments = getPunishmentService().loadAll();
-    //    loadedPunishments.stream().forEach(punishment -> {
-     //       UUID playerKey = punishment.getPunishmentReceiver();
-     //       addOrInit(playerKey, punishment);
-     //   });
+        List<Punishment> loadedPunishments = getPunishmentService().loadAll();
+        loadedPunishments.forEach(punishment -> {
+            Bukkit.broadcastMessage(punishment.getReason());
+            addOrInit(punishment.getPunishmentReceiver(), punishment);
+        });
     }
 
     private Punishment buildPunishment(UUID issuer, UUID receiver, String reason, Instant expiresAt, PunishmentType punishmentType) {
@@ -108,6 +101,11 @@ public class PunishmentController {
         }
     }
 
+
+    public void save(Punishment punishment) {
+       getPunishmentService().save(punishment);
+    }
+
     /**
      * @param punishment from builder
      * @return result of action, handle in command accordingly
@@ -118,11 +116,19 @@ public class PunishmentController {
         }
         PunishmentType type = punishment.getPunishmentType();
         if (type.equals(PunishmentType.BAN)) {
-            return doBan(punishment);
+            PunishmentResult result = doBan(punishment);
+            if (result.equals(PunishmentResult.SUCCESS)) {
+                save(punishment);
+            }
+            return result;
         } else if (type.equals(PunishmentType.KICK)) {
             return doKick(punishment);
         } else if (type.equals(PunishmentType.MUTE)) {
-            return doMute(punishment);
+            PunishmentResult result = doMute(punishment);
+            if (result.equals(PunishmentResult.SUCCESS)) {
+                save(punishment);
+            }
+            return result;
         }
         return PunishmentResult.UNKNOWN_ERROR;
     }
@@ -155,13 +161,17 @@ public class PunishmentController {
     public boolean isPunishmentExpired(UUID playerId, PunishmentType punishmentType) {
         Optional<Punishment> potentialActivePunishment = getPunishment(playerId, punishmentType);
         AtomicBoolean isExpired = new AtomicBoolean(false);
-        potentialActivePunishment.ifPresent(punishment -> isExpired.set(punishment.getExpiresAt().isAfter(Instant.now())));
+        potentialActivePunishment.ifPresent(punishment -> isExpired.set(isPunishmentExpired(punishment)));
         return isExpired.get();
+    }
+
+    public boolean isPunishmentExpired(Punishment punishment) {
+        return punishment.getExpiresAt().isBefore(Instant.now());
     }
 
     public Instant parsePunishTime(String timeToAdd) {
         if (timeToAdd.equalsIgnoreCase("perma")) {
-            return Instant.MAX;
+            return Instant.now().plus(1000, ChronoUnit.WEEKS);
         } else {
             String timeWithoutUnit = timeToAdd.substring(0, timeToAdd.length() - 1);
             if (!timeWithoutUnit.matches("\\d+")) {
@@ -185,19 +195,22 @@ public class PunishmentController {
 
     public boolean unban(OfflinePlayer offlinePlayer) {
         Optional<Punishment> ban = getPunishment(offlinePlayer.getUniqueId(), PunishmentType.BAN);
-        if(ban.isPresent()){
+        if (ban.isPresent()) {
             Punishment punish = ban.get();
             getPunishments().get(offlinePlayer.getUniqueId()).remove(punish);
+            getPunishmentService().delete(punish);
             return true;
         } else {
             return false;
         }
     }
+
     public boolean unmute(OfflinePlayer offlinePlayer) {
         Optional<Punishment> mute = getPunishment(offlinePlayer.getUniqueId(), PunishmentType.MUTE);
-        if(mute.isPresent()){
+        if (mute.isPresent()) {
             Punishment punish = mute.get();
             getPunishments().get(offlinePlayer.getUniqueId()).remove(punish);
+            getPunishmentService().delete(punish);
             return true;
         } else {
             return false;
@@ -207,11 +220,11 @@ public class PunishmentController {
     public String buildReason(String[] reasonArgs, Boolean isSilent) {
         StringBuilder stringBuilder = new StringBuilder();
         //fix for not including reason sometimes idk why this even happens
-        if(reasonArgs.length == 1){
+        if (reasonArgs.length == 1) {
             return stringBuilder.append(reasonArgs[0]).toString();
         }
         for (int i = 0; i < reasonArgs.length; i++) {
-            if (isSilent != null && i == reasonArgs.length-1) {
+            if (isSilent != null && i == reasonArgs.length - 1) {
                 // dont include silent arg (-s/.v)
                 continue;
             } else {

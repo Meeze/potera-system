@@ -31,20 +31,13 @@ public class MuteCommand implements CommandExecutor {
         Player player = (Player) sender;
         switch (args.length) {
             case 0:
+            case 1:
+            case 2:
                 showUsage(player);
                 break;
-            case 1:
-                Player receiver = Bukkit.getPlayer(args[0]);
-                mute(player, receiver, Instant.MAX, "Generic Reason");
-                break;
-            case 2:
-                receiver = Bukkit.getPlayer(args[0]);
-                Instant expiresAt = getPunishmentController().parsePunishTime(args[1]);
-                mute(player, receiver, expiresAt, "Generic Reason");
-                break;
             default:
-                receiver = Bukkit.getPlayer(args[0]);
-                expiresAt = getPunishmentController().parsePunishTime(args[1]);
+                Player receiver = Bukkit.getPlayer(args[0]);
+                Instant expiresAt = getPunishmentController().parsePunishTime(args[1]);
                 String[] reason = Arrays.copyOfRange(args, 2, args.length);
                 mute(player, receiver, expiresAt, reason);
                 break;

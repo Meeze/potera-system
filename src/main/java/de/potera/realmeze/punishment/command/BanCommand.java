@@ -32,20 +32,19 @@ public class BanCommand implements CommandExecutor {
         Player player = (Player) sender;
         switch (args.length) {
             case 0:
+            case 2:
                 showUsage(player);
                 break;
             case 1:
-                OfflinePlayer receiver = Bukkit.getOfflinePlayer(args[0]);
-                ban(player, receiver, Instant.MAX, "-vocal", "Generic Reason");
-                break;
-            case 2:
-                receiver = Bukkit.getOfflinePlayer(args[0]);
-                Instant expiresAt = getPunishmentController().parsePunishTime(args[1]);
-                ban(player, receiver, expiresAt, "-vocal", "Generic Reason");
+                if(args[0].equalsIgnoreCase("debug")){
+                    debug();
+                    break;
+                }
+                showUsage(player);
                 break;
             default:
-                receiver = Bukkit.getOfflinePlayer(args[0]);
-                expiresAt = getPunishmentController().parsePunishTime(args[1]);
+                OfflinePlayer receiver = Bukkit.getOfflinePlayer(args[0]);
+                Instant expiresAt = getPunishmentController().parsePunishTime(args[1]);
                 String[] reason = Arrays.copyOfRange(args, 2, args.length);
                 ban(player, receiver, expiresAt, args[args.length - 1], reason);
                 break;
@@ -93,5 +92,9 @@ public class BanCommand implements CommandExecutor {
         } else {
             return null;
         }
+    }
+
+    public void debug() {
+        getPunishmentController().getPunishments().values().forEach(punishments -> { punishments.forEach(punishment -> Bukkit.broadcastMessage(punishment.getReason()));});
     }
 }
