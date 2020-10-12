@@ -2,6 +2,7 @@ package de.potera.teamhardcore.events;
 
 import de.potera.realmeze.punishment.controller.PunishmentController;
 import de.potera.realmeze.punishment.event.PunishListener;
+import de.potera.realmeze.punishment.model.Punishment;
 import de.potera.realmeze.punishment.model.PunishmentType;
 import de.potera.teamhardcore.Main;
 import de.potera.teamhardcore.others.Support;
@@ -32,11 +33,15 @@ public class AsyncPlayerChat implements PunishListener {
 
         String message = event.getMessage();
 
-
-        if(punishmentController.getPunishment(player.getUniqueId(), PunishmentType.MUTE).isPresent()){
-            player.sendMessage("du bist muted lulw");
-            event.setCancelled(true);
-            return;
+        Optional<Punishment> punishment = punishmentController.getPunishment(player.getUniqueId(), PunishmentType.MUTE);
+        if(punishment.isPresent()){
+            if(getPunishmentController().isPunishmentExpired(punishment.get())){
+                getPunishmentController().unmute(event.getPlayer());
+            } else {
+                player.sendMessage("du bist muted lulw");
+                event.setCancelled(true);
+                return;
+            }
         }
 
         if (message.contains("̇") || message.equalsIgnoreCase("")) {

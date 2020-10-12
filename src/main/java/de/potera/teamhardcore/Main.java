@@ -10,6 +10,7 @@ import de.potera.realmeze.punishment.command.MuteCommand;
 import de.potera.realmeze.punishment.command.UnbanCommand;
 import de.potera.realmeze.punishment.command.UnmuteCommand;
 import de.potera.realmeze.punishment.controller.PunishmentController;
+import de.potera.realmeze.punishment.service.PunishmentService;
 import de.potera.rysefoxx.bossegg.BossEggAbilities;
 import de.potera.rysefoxx.bossegg.BossEggCommand;
 import de.potera.rysefoxx.bossegg.BossEggManager;
@@ -77,6 +78,7 @@ public class Main extends JavaPlugin {
     private boolean shutdownDirectly = false;
 
     private WorldEditPlugin worldEditPlugin;
+
 
     public static Main getInstance() {
         return instance;
@@ -158,7 +160,8 @@ public class Main extends JavaPlugin {
         this.jackpotManager = new JackpotManager();
         this.combatManager = new CombatManager();
         this.punishmentController = new PunishmentController();
-        this.punishmentController.loadFromDatabase();
+        punishmentController.setPunishmentService(new PunishmentService());
+        this.punishmentController.init();
         this.dailyPotManager = new DailyPotManager();
         this.tradeManager = new TradeManager();
         this.bossEggManager = new BossEggManager();

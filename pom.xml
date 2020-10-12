@@ -64,6 +64,16 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${basedir}/Libs/SpigotServer.jar</systemPath>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.persistence</groupId>
+                    <artifactId>persistence-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.persistence</groupId>
+                    <artifactId>javax.persistence-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -86,6 +96,13 @@
             <version>6.1.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.0.0.Alpha6</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.sk89q</groupId>
@@ -135,6 +152,20 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+
+
+
     </dependencies>
 
     <build>
@@ -169,6 +200,12 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <artifactSet>
                                 <includes>
+                                    <include>javax.persistence:*</include>
+                                    <include>javax.transaction:*</include>
+                                    <include>org.hibernate:*</include>
+                                    <include>org.hibernate.*:*</include>
+                                    <include>org.hibernate.service:*</include>
+                                    <include>org.hibernate.service.*:*</include>
                                     <include>com.zaxxer:*</include>
                                     <include>org.json:*</include>
                                     <include>org.slf4j:*</include>
@@ -176,6 +213,11 @@
                                     <include>de.potera:*</include>
                                     <include>de.tr7zw:*</include>
                                     <include>org.mariadb.jdbc:*</include>
+                                    <include>org.jboss.logging:*</include>
+                                    <include>net.bytebuddy:*</include>
+                                    <include>com.fasterxml:*</include>
+                                    <include>org.dom4j:*</include>
+                                    <include>org.antlr:*</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
