@@ -4,6 +4,7 @@ import de.potera.realmeze.punishment.controller.PunishmentController;
 import de.potera.realmeze.punishment.event.PunishListener;
 import de.potera.realmeze.punishment.model.Punishment;
 import de.potera.realmeze.punishment.model.PunishmentType;
+import de.potera.rysefoxx.utils.StringSimilarity;
 import de.potera.teamhardcore.Main;
 import de.potera.teamhardcore.others.Support;
 import de.potera.teamhardcore.others.clan.Clan;
@@ -33,9 +34,11 @@ public class AsyncPlayerChat implements PunishListener {
 
         String message = event.getMessage();
 
+        String[] messageArray = event.getMessage().split(" ");
+
         Optional<Punishment> punishment = punishmentController.getPunishment(player.getUniqueId(), PunishmentType.MUTE);
-        if(punishment.isPresent()){
-            if(getPunishmentController().isPunishmentExpired(punishment.get())){
+        if (punishment.isPresent()) {
+            if (getPunishmentController().isPunishmentExpired(punishment.get())) {
                 getPunishmentController().unmute(event.getPlayer());
             } else {
                 player.sendMessage("du bist muted lulw");
@@ -43,6 +46,43 @@ public class AsyncPlayerChat implements PunishListener {
                 return;
             }
         }
+
+        for (String msg : messageArray) {
+            double result;
+            for (String badWords : Main.getInstance().getAutoMuteManager().getDisallowedWords()) {
+                result = StringSimilarity.similarity(msg, badWords);
+
+                //ToDo: Spieler muten
+                if (result >= 0.7) {
+                    event.setCancelled(true);
+
+                    //15 min mute
+
+                    break;
+                } else if (result >= 0.8) {
+                    event.setCancelled(true);
+
+                    //20 min mute
+
+                    break;
+                } else if (result >= 0.9) {
+                    event.setCancelled(true);
+
+                    //25 min mute
+
+                    break;
+                } else if (result >= 1) {
+                    event.setCancelled(true);
+
+                    //30 Min mute
+
+                    break;
+                }
+            }
+
+
+        }
+
 
         if (message.contains("̇") || message.equalsIgnoreCase("")) {
             event.setCancelled(true);
@@ -115,7 +155,6 @@ public class AsyncPlayerChat implements PunishListener {
             player.sendMessage(StringDefaults.PREFIX + "§cDer Chat ist momentan deaktiviert.");
             return;
         }
-
 
 
         if (!player.hasPermission("potera.settings.bypass")) {

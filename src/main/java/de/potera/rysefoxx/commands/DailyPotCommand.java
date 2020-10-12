@@ -20,15 +20,15 @@ public class DailyPotCommand implements CommandExecutor {
 
         if (args.length == 1) {
             if (Main.getInstance().getDailyPotManager().alreadyJoined(player)) {
-                player.sendMessage(StringDefaults.PREFIX + "Du hast dich bereits für den Dailypot angemeldet.");
+                player.sendMessage(StringDefaults.PREFIX + "§7Du hast dich bereits für den Dailypot angemeldet.");
                 return true;
             }
             if (!Main.getInstance().getDailyPotManager().canJoin()) {
-                player.sendMessage(StringDefaults.PREFIX + "Du bist zuspät! Der Dailypot wirde gerade ausgelost.");
+                player.sendMessage(StringDefaults.PREFIX + "§7Du bist zuspät! Der Dailypot wirde gerade ausgelost.");
                 return true;
             }
             Main.getInstance().getDailyPotManager().addPlayer(player);
-            player.sendMessage(StringDefaults.DAILYPOT_PREFIX + "Du hast dich für den Dailypot erfolgreich angemeldet.");
+            player.sendMessage(StringDefaults.DAILYPOT_PREFIX + "§7Du hast dich für den Dailypot erfolgreich angemeldet.");
         } else if (args.length == 0) {
             player.sendMessage(StringDefaults.DAILYPOT_PREFIX + "§7Der Dailypot hat derzeit eine Größe von §c" + Util.formatBigNumber(Main.getInstance().getDailyPotManager().getDeployment()) + "$");
         } else {

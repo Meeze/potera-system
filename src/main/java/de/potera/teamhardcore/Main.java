@@ -16,6 +16,7 @@ import de.potera.rysefoxx.bossegg.BossEggCommand;
 import de.potera.rysefoxx.bossegg.BossEggManager;
 import de.potera.rysefoxx.bossegg.BossEggSerializer;
 import de.potera.rysefoxx.commands.*;
+import de.potera.rysefoxx.manager.AutoMuteManager;
 import de.potera.rysefoxx.manager.DailyPotManager;
 import de.potera.rysefoxx.manager.EnderChestManager;
 import de.potera.rysefoxx.manager.TeamManager;
@@ -72,6 +73,7 @@ public class Main extends JavaPlugin {
     private BossEggAbilities bossEggAbilities;
     private TeamManager teamManager;
     private EnderChestManager enderChestManager;
+    private AutoMuteManager autoMuteManager;
 
     private PunishmentController punishmentController;
 
@@ -112,6 +114,7 @@ public class Main extends JavaPlugin {
         this.dailyPotManager.onDisable();
         this.bossEggManager.forceEnd();
         this.enderChestManager.onDisable();
+        this.autoMuteManager.save();
         FakeMobsPlugin.onDisable(this);
 
 
@@ -168,9 +171,11 @@ public class Main extends JavaPlugin {
         this.bossEggAbilities = new BossEggAbilities();
         this.teamManager = new TeamManager();
         this.enderChestManager = new EnderChestManager();
+        this.autoMuteManager = new AutoMuteManager();
 
         PluginManager pm = Bukkit.getPluginManager();
 
+        getCommand("automute").setExecutor(new AutoMuteCommand());
         getCommand("teleport").setExecutor(new TeleportCommand());
         getCommand("enderchest").setExecutor(new EnderChestCommand());
         getCommand("team").setExecutor(new TeamCommand());

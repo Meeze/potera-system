@@ -6,6 +6,7 @@ main: de.potera.teamhardcore.Main
 depend: [ WorldGuard,WGRegionEvents,ProtocolLib,WorldEdit,FastAsyncWorldEdit,LuckPerms, Multiverse-Core ]
 
 commands:
+  automute:
   teleport:
     aliases:
       - tp

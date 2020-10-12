@@ -22,6 +22,7 @@ public class EnderChestManager {
     }
 
     private void load() {
+        this.accessible = true;
         if (this.fileBase.getConfig().getKeys(false).isEmpty()) return;
         for (String data : this.fileBase.getConfig().getKeys(false)) {
             ItemStack[] contents = new ItemStack[this.fileBase.getConfig().getList(data + ".enderchest").size()];
@@ -32,7 +33,6 @@ public class EnderChestManager {
             }
             this.contents.put(UUID.fromString(data), contents);
         }
-        this.accessible = true;
     }
 
     public void onDisable() {

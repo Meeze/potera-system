@@ -87,7 +87,7 @@ public class DailyPotManager {
                             User user = Main.getInstance().getUserManager().getUser(UUID.fromString(playerUUID));
                             user.getUserCurrency().addMoney(Main.getInstance().getDailyPotManager().getDeployment());
                             if (offlinePlayer.isOnline()) {
-                                ((Player) offlinePlayer).sendMessage(StringDefaults.DAILYPOT_PREFIX + "Du hast §c" + Util.formatBigNumber(Main.getInstance().getDailyPotManager().getDeployment()) + " Münzen §7gewonnen!");
+                                ((Player) offlinePlayer).sendMessage(StringDefaults.DAILYPOT_PREFIX + "§7Du hast §c" + Util.formatBigNumber(Main.getInstance().getDailyPotManager().getDeployment()) + " Münzen §7gewonnen!");
                             }
 
                             // RESET //

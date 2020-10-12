@@ -42,6 +42,12 @@ public class DelWarnCommand implements CommandExecutor {
             int warnsToRemove = Integer.parseInt(args[1]);
             User userTarget = Main.getInstance().getUserManager().getUser(target.getUniqueId());
             UserWarn userWarn = userTarget.getUserWarn();
+
+            if (userWarn.getWarns() < warnsToRemove) {
+                player.sendMessage(StringDefaults.PREFIX + "§7Der Spieler §c" + target.getName() + " §7hat keine §6" + warnsToRemove + " Warns");
+                return true;
+            }
+
             userWarn.deleteWarn(warnsToRemove);
             Bukkit.broadcastMessage(StringDefaults.WARN_PREFIX + "§4" + player.getName() + " §chat §4" + target.getName() + " §6" + warnsToRemove + " Warns §centfernt.");
         } else {

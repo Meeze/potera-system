@@ -27,7 +27,7 @@ public class EnderChestCommand implements CommandExecutor {
         }
 
         if (!Main.getInstance().getEnderChestManager().isAccessible()) {
-            player.sendMessage(StringDefaults.PREFIX + "Die Enderchests werden gerade geladen.");
+            player.sendMessage(StringDefaults.PREFIX + "§cDie Enderchests werden gerade geladen!");
             return true;
         }
 
