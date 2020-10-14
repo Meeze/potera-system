@@ -50,7 +50,7 @@ public class BossEggManager {
 
     public BossEgg forName(String name) {
         for (BossEgg bossEgg : bossEggList) {
-            if (bossEgg.getDisplayName().equalsIgnoreCase(name)) {
+            if (bossEgg.getBossName().equalsIgnoreCase(name)) {
                 return bossEgg;
             }
         }
@@ -74,7 +74,7 @@ public class BossEggManager {
             BossEgg bossEgg = new BossEgg(string);
             bossEgg.setItems((List<BossEggSerializer>) config.getConfig().getList(string + ".items"));
             bossEgg.setMaxHealth(config.getConfig().getInt(string + ".maxHealth"));
-            bossEgg.setBroadcast(config.getConfig().getBoolean(string + ".broadcast"));
+            bossEgg.setDeathBroadcast(config.getConfig().getBoolean(string + ".deathBroadcast"));
             bossEgg.setItemStack(config.getConfig().getItemStack(string + ".itemStack"));
             bossEgg.setHelmet(config.getConfig().getItemStack(string + ".helmet"));
             bossEgg.setChestPlate(config.getConfig().getItemStack(string + ".chestPlate"));
@@ -87,6 +87,7 @@ public class BossEggManager {
             bossEgg.setBroadcastOnSpawn(config.getConfig().getBoolean(string + ".broadcastOnSpawn"));
             bossEgg.setCanUseAbilities(config.getConfig().getBoolean(string + ".canUseAbilities"));
             bossEgg.setAbilityChance(config.getConfig().getDouble(string + ".abilityChance"));
+            bossEgg.setDisplayName(config.getConfig().getString(string + ".displayName"));
             if (EntityType.fromName(config.getConfig().getString(string + ".entityType")) != null) {
                 bossEgg.setEntityType(EntityType.fromName(config.getConfig().getString(string + ".entityType")));
             } else {
@@ -142,6 +143,7 @@ public class BossEggManager {
 
         player.sendMessage(StringDefaults.PREFIX + "§7BossEgg create <Name> §8- §6BossEgg erstellen");
         player.sendMessage(StringDefaults.PREFIX + "§7BossEgg delete <Name> §8- §6BossEgg löschen");
+        player.sendMessage(StringDefaults.PREFIX + "§7BossEgg setDisplayName <Boss> <Name> §8- §6BossEgg umbenennen");
         player.sendMessage(StringDefaults.PREFIX + "§7BossEgg list §8- §6Alle BossEggs auflisten");
         player.sendMessage(StringDefaults.PREFIX + "§7BossEgg setMaxHealth <EggName> <Health> §8- §6Max Health setzen");
         player.sendMessage(StringDefaults.PREFIX + "§7BossEgg addItem <EggName> <Prozent> §8- §6Item hinzufügen");

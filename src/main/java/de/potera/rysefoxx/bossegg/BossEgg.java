@@ -13,7 +13,6 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -23,11 +22,11 @@ import java.util.*;
 
 public class BossEgg {
 
-    private String displayName;
+    private String bossName;
     private List<BossEggSerializer> items;
     private ItemStack itemStack;
     private int maxHealth;
-    private boolean broadcast;
+    private boolean deathBroadcast;
     private EntityType entityType;
     private ItemStack helmet;
     private ItemStack chestPlate;
@@ -43,21 +42,21 @@ public class BossEgg {
     private boolean canSpawnHologram;
     private boolean canUseAbilities;
     private double abilityChance;
+    private String displayName;
 
 
-    public BossEgg(String displayName) {
-        this.displayName = displayName;
+    public BossEgg(String bossName) {
+        this.bossName = bossName;
         this.items = new ArrayList<>();
         this.itemStack = new ItemBuilder(Material.BARRIER).build();
         this.maxHealth = 100;
-        this.broadcast = false;
+        this.deathBroadcast = false;
         this.entityType = EntityType.ZOMBIE;
         this.helmet = new ItemBuilder(Material.AIR).build();
         this.chestPlate = new ItemBuilder(Material.AIR).build();
         this.leggings = new ItemBuilder(Material.AIR).build();
         this.boots = new ItemBuilder(Material.AIR).build();
         this.itemInHand = new ItemBuilder(Material.AIR).build();
-        this.holoText = "";
         this.entity = null;
         this.minDropAmount = 1;
         this.maxDropAmount = 4;
@@ -66,6 +65,8 @@ public class BossEgg {
         this.canSpawnHologram = true;
         this.canUseAbilities = true;
         this.abilityChance = 15;
+        this.displayName = "&7" + this.bossName;
+        this.holoText = "§c§lBOSS §8- " + this.getColoredName() + " §8(§c%maxHealth%§8/§c%health%§8)";
     }
 
     public void spawn(Player player, int x, int y, int z) {
@@ -116,11 +117,9 @@ public class BossEgg {
         String id;
 
         id = UUID.randomUUID().toString().replace("-", "");
-        List<String> allIds;
+        List<String> allIds = new ArrayList<>();
         if (Main.getPlugin(Main.class).getBossEggManager().getLivingBosses().containsKey(this)) {
             allIds = Main.getPlugin(Main.class).getBossEggManager().getLivingBosses().get(this);
-        } else {
-            allIds = new ArrayList<>();
         }
         allIds.add(id);
 
@@ -170,7 +169,7 @@ public class BossEgg {
     public void dropReward(LivingEntity livingEntity, int rewardAmount) {
 
         if (this.getItems().isEmpty()) {
-            Main.getInstance().getLogger().warning("Boss " + this.getDisplayName() + " has no rewards");
+            Main.getInstance().getLogger().warning("Boss " + this.getBossName() + " has no rewards");
             return;
         }
 
@@ -194,12 +193,12 @@ public class BossEgg {
 
     }
 
-    public void createHologram(LivingEntity livingEntity, BossEgg bossEgg, int rewardAmount, String metaDataValueId) {
+    public void createHologram(LivingEntity livingEntity, int rewardAmount, String metaDataValueId) {
 
         HologramAPI hologramAPI = new HologramAPI(livingEntity.getLocation(), Arrays.asList(
                 "§6§k---------§r §c§lTodesinformationen §6§k---------",
                 "§r",
-                "§7Hier wurde die Leiche von §c§l" + bossEgg.getDisplayName() + " §7gefunden.",
+                "§7Hier wurde die Leiche von §c§l" + this.getColoredName() + " §7gefunden.",
                 "§r",
                 "§6➥ §7Verursachter Schaden§8: §c" + Main.getPlugin(Main.class).getBossEggManager().getDamageDone().get(metaDataValueId),
                 "§6➥ §7Überlebte Zeit§8: §c" + TimeUtils.shortInteger(Main.getPlugin(Main.class).getBossEggManager().getAliveTimer().get(metaDataValueId)),
@@ -210,12 +209,12 @@ public class BossEgg {
         Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getPlugin(Main.class), hologramAPI::remove, 20 * 60L);
     }
 
-    public void sendInformations(Player killer, BossEgg bossEgg, int rewardAmount) {
+    public void sendInformation(Player killer, int rewardAmount) {
         if (killer == null) return;
 
         Bukkit.broadcastMessage("§6§l§k---------------------------");
         Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("§c§l" + killer.getName() + " §7hat den Boss §c§l" + bossEgg.getDisplayName() + " §7getötet!");
+        Bukkit.broadcastMessage("§c§l" + killer.getName() + " §7hat den Boss §c§l" + this.getColoredName() + " §7getötet!");
         Bukkit.broadcastMessage("");
         Bukkit.broadcastMessage("§7Der Boss hat §c§l" + rewardAmount + " Items §7gedroppt.");
         Bukkit.broadcastMessage("§7Der Boss ist an den Folgenden Koordinaten gestorben");
@@ -224,16 +223,16 @@ public class BossEgg {
         Bukkit.broadcastMessage("§6§l§k---------------------------");
     }
 
-    public void onDespawn(String meteDataValueId, BossEgg bossEgg, LivingEntity livingEntity) {
+    public void onDespawn(String meteDataValueId, LivingEntity livingEntity) {
 
         livingEntity.getLocation().getWorld().playEffect(livingEntity.getLocation(), Effect.EXPLOSION_HUGE, 0, 5);
         livingEntity.getLocation().getWorld().playSound(livingEntity.getLocation(), Sound.EXPLODE, 5, 5);
         if (livingEntity.getPassenger() != null) {
             livingEntity.getPassenger().remove();
         }
-        List<String> ids = Main.getPlugin(Main.class).getBossEggManager().getLivingBosses().get(bossEgg);
+        List<String> ids = Main.getPlugin(Main.class).getBossEggManager().getLivingBosses().get(this);
         ids.remove(meteDataValueId);
-        Main.getPlugin(Main.class).getBossEggManager().getLivingBosses().put(bossEgg, ids);
+        Main.getPlugin(Main.class).getBossEggManager().getLivingBosses().put(this, ids);
         Main.getPlugin(Main.class).getBossEggManager().getAliveTimer().remove(meteDataValueId);
         Main.getPlugin(Main.class).getBossEggManager().getDamageDone().remove(meteDataValueId);
     }
@@ -269,32 +268,37 @@ public class BossEgg {
         return playerList.get(0);
     }
 
+    public String getColoredName() {
+        return ChatColor.translateAlternateColorCodes('&', this.getDisplayName());
+    }
+
     public void save() {
         for (BossEgg bossEgg : Main.getPlugin(Main.class).getBossEggManager().getBossEggList()) {
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".items", bossEgg.getItems());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".itemStack", bossEgg.getItemStack());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".maxHealth", bossEgg.getMaxHealth());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".broadcast", bossEgg.isBroadcast());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".entityType", bossEgg.getEntityType().getName());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".helmet", bossEgg.getHelmet());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".chestPlate", bossEgg.getChestPlate());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".leggings", bossEgg.getLeggings());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".boots", bossEgg.getBoots());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".itemInHand", bossEgg.getItemInHand());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".holoText", bossEgg.getHoloText());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".minDropAmount", bossEgg.getMinDropAmount());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".maxDropAmount", bossEgg.getMaxDropAmount());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".collection", bossEgg.getCollection());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".broadcastOnSpawn", bossEgg.isBroadcastOnSpawn());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".canUseAbilities", bossEgg.isCanUseAbilities());
-            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getDisplayName() + ".abilityChance", bossEgg.getAbilityChance());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".items", bossEgg.getItems());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".itemStack", bossEgg.getItemStack());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".maxHealth", bossEgg.getMaxHealth());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".deathBroadcast", bossEgg.isDeathBroadcast());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".entityType", bossEgg.getEntityType().getName());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".helmet", bossEgg.getHelmet());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".chestPlate", bossEgg.getChestPlate());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".leggings", bossEgg.getLeggings());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".boots", bossEgg.getBoots());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".itemInHand", bossEgg.getItemInHand());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".holoText", bossEgg.getHoloText());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".minDropAmount", bossEgg.getMinDropAmount());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".maxDropAmount", bossEgg.getMaxDropAmount());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".collection", bossEgg.getCollection());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".broadcastOnSpawn", bossEgg.isBroadcastOnSpawn());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".canUseAbilities", bossEgg.isCanUseAbilities());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".abilityChance", bossEgg.getAbilityChance());
+            Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(bossEgg.getBossName() + ".displayName", bossEgg.getDisplayName());
         }
         Main.getPlugin(Main.class).getBossEggManager().getConfig().saveConfig();
     }
 
     public void delete() {
         Main.getPlugin(Main.class).getBossEggManager().getBossEggList().remove(this);
-        Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(this.displayName, null);
+        Main.getPlugin(Main.class).getBossEggManager().getConfig().getConfig().set(this.bossName, null);
         Main.getPlugin(Main.class).getBossEggManager().getConfig().saveConfig();
     }
 

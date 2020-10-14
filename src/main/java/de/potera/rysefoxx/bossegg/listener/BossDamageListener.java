@@ -21,25 +21,24 @@ public class BossDamageListener implements Listener {
         if (e.getDamager() instanceof Player && !(e.getEntity() instanceof Player)) {
             LivingEntity livingEntity = (LivingEntity) e.getEntity();
 
-            if (livingEntity.hasMetadata("BOSS")) {
-                for (MetadataValue string : livingEntity.getMetadata("BOSS")) {
-                    BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forID(string.asString());
-                    livingEntity.getPassenger().setCustomName(bossEgg.getHoloText().replace("%health%", String.valueOf(Math.round(livingEntity.getHealth()))).replace("%maxHealth%", String.valueOf(Math.round(livingEntity.getMaxHealth()))));
-                    if (!bossEgg.isCanUseAbilities()) return;
+            if (!livingEntity.hasMetadata("BOSS")) return;
 
-                    if (Util.getChance(bossEgg.getAbilityChance())) {
-                        bossEgg.useRandomAbility(livingEntity);
-                    }
+            for (MetadataValue string : livingEntity.getMetadata("BOSS")) {
+                BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forID(string.asString());
+                livingEntity.getPassenger().setCustomName(bossEgg.getHoloText().replace("%health%", String.valueOf(Math.round(livingEntity.getHealth()))).replace("%maxHealth%", String.valueOf(Math.round(livingEntity.getMaxHealth()))));
+                if (!bossEgg.isCanUseAbilities()) return;
 
+                if (Util.getChance(bossEgg.getAbilityChance())) {
+                    bossEgg.useRandomAbility(livingEntity);
                 }
+
             }
         } else if (e.getDamager() instanceof Monster) {
-            if (e.getDamager().hasMetadata("BOSS")) {
-                for (MetadataValue string : e.getDamager().getMetadata("BOSS")) {
-                    double damageDone = Main.getPlugin(Main.class).getBossEggManager().getDamageDone().get(string.asString());
-                    damageDone += round(e.getFinalDamage() / 2, 2);
-                    Main.getPlugin(Main.class).getBossEggManager().getDamageDone().put(string.asString(), damageDone);
-                }
+            if (!e.getDamager().hasMetadata("BOSS")) return;
+            for (MetadataValue string : e.getDamager().getMetadata("BOSS")) {
+                double damageDone = Main.getPlugin(Main.class).getBossEggManager().getDamageDone().get(string.asString());
+                damageDone += round(e.getFinalDamage() / 2, 2);
+                Main.getPlugin(Main.class).getBossEggManager().getDamageDone().put(string.asString(), damageDone);
             }
         }
     }

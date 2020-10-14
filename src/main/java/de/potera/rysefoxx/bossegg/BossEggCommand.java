@@ -54,6 +54,7 @@ public class BossEggCommand implements CommandExecutor {
         /BossEgg setAnnouncement <BossEgg> <Boolean>
         /BossEgg setCollection <BossEgg> <Integer>
         /Bossegg Settings <BossEgg>
+        /Bossegg setDisplayName <BossEgg> <Name>
 
         /BossEgg spawn <Bossegg> <X> <Y> <Z>
 
@@ -71,9 +72,33 @@ public class BossEggCommand implements CommandExecutor {
             BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
             bossEgg.setHoloText(ChatColor.translateAlternateColorCodes('&', Util.messageBuilder(2, args)));
             bossEgg.save();
-            player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast das Hologram für §c" + args[1] + " §7geupdatet.");
-        } else if (args.length == 3) {
-            if (args[0].equalsIgnoreCase("setMinDropAmount")) {
+            player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast das Hologram für §c" + bossEgg.getColoredName() + " §7geupdatet.");
+            return true;
+        }
+        if (args.length == 3) {
+            if (args[0].equalsIgnoreCase("setDisplayName")) {
+                if (!Main.getPlugin(Main.class).getBossEggManager().alreadyExists(args[1])) {
+                    player.sendMessage(StringDefaults.PREFIX + "§7Dieses BossEgg existiert nicht.");
+                    return true;
+                }
+                BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
+                bossEgg.setDisplayName(ChatColor.translateAlternateColorCodes('&', args[2]));
+                bossEgg.setItemStack(new ItemBuilder(Material.DRAGON_EGG).setDisplayName("§6§lSpawn-Ei §8- §c§l" + bossEgg.getColoredName()).setLore(Arrays.asList(
+                        "§7Klicke mit dem Spawn-Ei auf ein Block",
+                        "§7um den Boss §c§l" + bossEgg.getColoredName() + " §7zu spawnen.",
+                        "",
+                        "§7Der Boss wird je nach Schwierigkeit Items droppen.",
+                        "§7Dieser Boss droppt zwischen §c" + bossEgg.getMinDropAmount() + "§8-§c" + bossEgg.getMaxDropAmount() + " Items",
+                        "§7Die Items haben je nach §c§lBesonderheit §7eine §akleine Dropchance",
+                        "§7oder eine §ahohe Dropchance.",
+                        "",
+                        "§7Dieses Spawn-Ei stammt aus der §c§l" + bossEgg.getCollection() + " §7Kollektion.",
+                        "",
+                        "§7Linksklick §8- §eMögliche Items anzeigen",
+                        "§7Rechtsklick §8- §eBoss spawnen")).build());
+                bossEgg.save();
+                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Der Displayname lautet nun §c" + bossEgg.getColoredName());
+            } else if (args[0].equalsIgnoreCase("setMinDropAmount")) {
                 if (!Main.getPlugin(Main.class).getBossEggManager().alreadyExists(args[1])) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieses BossEgg existiert nicht.");
                     return true;
@@ -118,7 +143,7 @@ public class BossEggCommand implements CommandExecutor {
 
                 bossEgg.getItems().add(bossEggSerializer);
                 bossEgg.save();
-                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast erfolgreich das Item in deiner Hand zum BossEgg §c" + args[1] + " §7hinzugefügt.");
+                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast erfolgreich das Item in deiner Hand zum BossEgg §c" + bossEgg.getColoredName()+ " §7hinzugefügt.");
             } else if (args[0].equalsIgnoreCase("setType")) {
                 if (!Main.getPlugin(Main.class).getBossEggManager().alreadyExists(args[1])) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieses BossEgg existiert nicht.");
@@ -132,7 +157,7 @@ public class BossEggCommand implements CommandExecutor {
                 BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
                 bossEgg.setEntityType(entityType);
                 bossEgg.save();
-                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§c" + args[1] + " §7erscheint nun als §c" + entityType.getName());
+                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§c" + bossEgg.getColoredName()+ " §7erscheint nun als §c" + entityType.getName());
             } else if (args[0].equalsIgnoreCase("setCollection")) {
                 if (!Main.getPlugin(Main.class).getBossEggManager().alreadyExists(args[1])) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieses BossEgg existiert nicht.");
@@ -148,22 +173,18 @@ public class BossEggCommand implements CommandExecutor {
                 }
                 bossEgg.setCollection(collection);
                 bossEgg.save();
-                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§c" + args[1] + " §7ist nun aus der §c" + args[2] + " Kollektion.");
+                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§c" + bossEgg.getColoredName() + " §7ist nun aus der §c" + args[2] + " Kollektion.");
             } else if (args[0].equalsIgnoreCase("setAnnouncement")) {
 
                 if (!Main.getPlugin(Main.class).getBossEggManager().alreadyExists(args[1])) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieses BossEgg existiert nicht.");
                     return true;
                 }
-                boolean broadcast;
-                if (args[2].equalsIgnoreCase("true")) {
-                    broadcast = true;
-                } else if (args[2].equalsIgnoreCase("false")) {
-                    broadcast = false;
-                } else {
-                    player.sendMessage(StringDefaults.PREFIX + "§7Bitte gebe einen richtigen Boolean an. (True,False)");
+                if (!Util.isBoolean(args[2])) {
+                    player.sendMessage(StringDefaults.PREFIX + "§7Bitte gib einen richtigen Boolean an. (True,False)");
                     return true;
                 }
+                boolean broadcast = Boolean.valueOf(args[2]);
                 BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
                 bossEgg.setBroadcastOnSpawn(broadcast);
                 bossEgg.save();
@@ -173,17 +194,14 @@ public class BossEggCommand implements CommandExecutor {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieses BossEgg existiert nicht.");
                     return true;
                 }
-                boolean broadcast;
-                if (args[2].equalsIgnoreCase("true")) {
-                    broadcast = true;
-                } else if (args[2].equalsIgnoreCase("false")) {
-                    broadcast = false;
-                } else {
-                    player.sendMessage(StringDefaults.PREFIX + "§7Bitte gebe einen richtigen Boolean an. (True,False)");
+                if (!Util.isBoolean(args[2])) {
+                    player.sendMessage(StringDefaults.PREFIX + "§7Bitte gib einen richtigen Boolean an. (True,False)");
                     return true;
                 }
+
+                boolean broadcast = Boolean.valueOf(args[2]);
                 BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
-                bossEgg.setBroadcast(broadcast);
+                bossEgg.setDeathBroadcast(broadcast);
                 bossEgg.save();
                 player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Die Items die droppen werden " + (broadcast ? "§cnun an alle Spieler gesendet" : "§cnun nicht mehr an alle Spieler gesendet") + ".");
 
@@ -199,9 +217,11 @@ public class BossEggCommand implements CommandExecutor {
                 BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
                 bossEgg.setMaxHealth(Integer.parseInt(args[2]));
                 bossEgg.save();
-                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§c" + args[1] + " §7startet nun mit §c" + Util.formatBigNumber(bossEgg.getMaxHealth()) + " Herzen");
+                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§c" + bossEgg.getColoredName()+ " §7startet nun mit §c" + Util.formatBigNumber(bossEgg.getMaxHealth()) + " Herzen");
             }
-        } else if (args.length == 5) {
+            return true;
+        }
+        if (args.length == 5) {
             if (args[0].equalsIgnoreCase("spawn")) {
                 if (!Main.getPlugin(Main.class).getBossEggManager().alreadyExists(args[1])) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieses BossEgg existiert nicht.");
@@ -222,7 +242,9 @@ public class BossEggCommand implements CommandExecutor {
                 BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
                 bossEgg.spawn(player, x, y, z);
             }
-        } else if (args.length == 2) {
+            return true;
+        }
+        if (args.length == 2) {
             if (args[0].equalsIgnoreCase("settings")) {
                 if (!Main.getPlugin(Main.class).getBossEggManager().alreadyExists(args[1])) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieses BossEgg existiert nicht.");
@@ -230,7 +252,7 @@ public class BossEggCommand implements CommandExecutor {
                 }
                 BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
                 InventoryMenuBuilder inventoryMenuBuilder = new InventoryMenuBuilder().withSize(9 * 4).withTitle("§7BossEgg Einstellungen");
-                Util.fill(inventoryMenuBuilder.getInventory(), 9*4);
+                Util.fill(inventoryMenuBuilder.getInventory(), 9 * 4);
 
                 inventoryMenuBuilder.withItem(10, new ItemBuilder(Material.BARRIER).setDisplayName("§7Einstellung§8: §cHologram").setLore(Arrays.asList(
                         "§7Stelle ein, ob dieses BossEgg ein",
@@ -262,7 +284,7 @@ public class BossEggCommand implements CommandExecutor {
                         player13.sendMessage("");
                         player13.sendMessage("§c" + player13.getName() + " §7hat ein Spawner-Ei aus der §c" + bossEgg.getCollection() + " Kollektion benutzt.");
                         player13.sendMessage("");
-                        player13.sendMessage("§7Boss Name§8: §c" + bossEgg.getDisplayName());
+                        player13.sendMessage("§7Boss Name§8: §c" + bossEgg.getColoredName());
                         player13.sendMessage("§7Boss Leben§8: §c" + bossEgg.getMaxHealth() + "❤");
                         player13.sendMessage("§7X§8: §c" + player13.getLocation().getBlockX());
                         player13.sendMessage("§7Y§8: §c" + player13.getLocation().getBlockY());
@@ -278,19 +300,19 @@ public class BossEggCommand implements CommandExecutor {
                         "§7wie viel Loot er gedroppt hat, wo er gestorben ist",
                         "§7und wie sein Boss Name ist.",
                         "",
-                        (bossEgg.isBroadcast() ? "§a§lEs werden alle Informationen beim Tod an die Spieler gesendet." : "§c§lEs werden keine Informationen an Spielern gesendet."),
+                        (bossEgg.isDeathBroadcast() ? "§a§lEs werden alle Informationen beim Tod an die Spieler gesendet." : "§c§lEs werden keine Informationen an Spielern gesendet."),
                         "",
                         "§7Linksklick §8- §eWechseln",
                         "§7Rechtsklick §8- §eVorschau: Nachricht")).build(), (player14, action, item) -> {
                     if (action == ClickType.LEFT) {
-                        bossEgg.setBroadcast(!bossEgg.isBroadcast());
+                        bossEgg.setDeathBroadcast(!bossEgg.isDeathBroadcast());
                         bossEgg.save();
                         player14.chat("/bossegg settings " + args[1]);
                     } else if (action == ClickType.RIGHT) {
                         player14.closeInventory();
                         player14.sendMessage("§6§l§k---------------------------");
                         player14.sendMessage("");
-                        player14.sendMessage("§c§l" + player14.getName() + " §7hat den Boss §c§l" + bossEgg.getDisplayName() + " §7getötet!");
+                        player14.sendMessage("§c§l" + player14.getName() + " §7hat den Boss §c§l" + bossEgg.getColoredName() + " §7getötet!");
                         player14.sendMessage("");
                         player14.sendMessage("§7Der Boss hat §c§l5 Items §7gedroppt.");
                         player14.sendMessage("§7Der Boss ist an den Folgenden Koordinaten gestorben");
@@ -324,7 +346,7 @@ public class BossEggCommand implements CommandExecutor {
                         if (event.getSlot() != AnvilGUI.AnvilSlot.OUTPUT) return;
                         String result = event.getName().replace("Prozentzahl", "");
                         if (!Util.isDouble(result)) {
-                            player16.sendMessage(StringDefaults.PREFIX+"§7Bitte gebe eine gültige Zahl ein.");
+                            player16.sendMessage(StringDefaults.PREFIX + "§7Bitte gebe eine gültige Zahl ein.");
                             return;
                         }
                         bossEgg.setAbilityChance(Double.parseDouble(result));
@@ -405,7 +427,7 @@ public class BossEggCommand implements CommandExecutor {
                 }
                 BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
                 player.getInventory().addItem(bossEgg.getItemStack().clone());
-                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast das BossEgg für den Boss §c" + args[1] + " §7erhalten");
+                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast das BossEgg für den Boss §c" + bossEgg.getColoredName() + " §7erhalten");
             } else if (args[0].equalsIgnoreCase("items")) {
                 if (!Main.getPlugin(Main.class).getBossEggManager().alreadyExists(args[1])) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieses BossEgg existiert nicht.");
@@ -428,7 +450,7 @@ public class BossEggCommand implements CommandExecutor {
                         bossEgg.getItems().remove(bossEggSerializer);
                         bossEgg.save();
                         player1.chat("/bossegg items " + args[1]);
-                        player1.sendMessage(StringDefaults.BOSSEGG_PREFIX + "Du hast das Item erfolgreich entfernt.");
+                        player1.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast das Item erfolgreich entfernt.");
                     }, ClickType.LEFT);
                     index++;
                 }
@@ -443,12 +465,12 @@ public class BossEggCommand implements CommandExecutor {
                 Main.getPlugin(Main.class).getBossEggManager().getBossEggList().add(bossEgg);
 
 
-                bossEgg.setItemStack(new ItemBuilder(Material.DRAGON_EGG).setDisplayName("§6§lSpawn-Ei §8- §c§l" + bossEgg.getDisplayName()).setLore(Arrays.asList(
+                bossEgg.setItemStack(new ItemBuilder(Material.DRAGON_EGG).setDisplayName("§6§lSpawn-Ei §8- §c§l" + bossEgg.getColoredName()).setLore(Arrays.asList(
                         "§7Klicke mit dem Spawn-Ei auf ein Block",
-                        "§7um den Boss §c§l" + bossEgg.getDisplayName() + " §7zu spawnen.",
+                        "§7um den Boss §c§l" + bossEgg.getColoredName() + " §7zu spawnen.",
                         "",
                         "§7Der Boss wird je nach Schwierigkeit Items droppen.",
-                        "§7Dieser Boss droppt zwischen §c" + bossEgg.getMinDropAmount() + "§8-§c" + bossEgg.getMaxDropAmount() + " Items",
+                        "§7Dieser Boss droppt zwischen §c" + bossEgg.getMinDropAmount() + "§8-§c" + bossEgg.getMaxDropAmount() + " Items.",
                         "§7Die Items haben je nach §c§lBesonderheit §7eine §akleine Dropchance",
                         "§7oder eine §ahohe Dropchance.",
                         "",
@@ -458,7 +480,7 @@ public class BossEggCommand implements CommandExecutor {
                         "§7Rechtsklick §8- §eBoss spawnen")).build());
 
                 bossEgg.save();
-                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast das BossEgg §c" + args[1] + " §7erfolgreich erstellt.");
+                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast das BossEgg §c" + bossEgg.getColoredName() + " §7erfolgreich erstellt.");
             } else if (args[0].equalsIgnoreCase("delete")) {
                 if (!Main.getPlugin(Main.class).getBossEggManager().alreadyExists(args[1])) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieses BossEgg existiert nicht.");
@@ -466,9 +488,11 @@ public class BossEggCommand implements CommandExecutor {
                 }
                 BossEgg bossEgg = Main.getPlugin(Main.class).getBossEggManager().forName(args[1]);
                 bossEgg.delete();
-                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast das BossEgg §c" + args[1] + " §7erfolgreich gelöscht,");
+                player.sendMessage(StringDefaults.BOSSEGG_PREFIX + "§7Du hast das BossEgg §c" + bossEgg.getColoredName() + " §7erfolgreich gelöscht,");
             }
-        } else if (args.length == 1) {
+            return true;
+        }
+        if (args.length == 1) {
             if (args[0].equalsIgnoreCase("help")) {
 
                 Main.getPlugin(Main.class).getBossEggManager().help(player);
@@ -479,7 +503,7 @@ public class BossEggCommand implements CommandExecutor {
                 int index = 0;
                 for (BossEgg bossEgg : Main.getPlugin(Main.class).getBossEggManager().getBossEggList()) {
                     if (index >= 53) break;
-                    inventoryMenuBuilder.withItem(index, new ItemBuilder(bossEgg.getItemStack().clone()).setDisplayName("§cBossEgg §8- §6" + bossEgg.getDisplayName()).setLore(Arrays.asList(
+                    inventoryMenuBuilder.withItem(index, new ItemBuilder(bossEgg.getItemStack().clone()).setDisplayName("§cBossEgg §8- §6" + bossEgg.getColoredName()).setLore(Arrays.asList(
                             "§7Dieser BossEgg hat §c" + bossEgg.getItems().size() + " §7verfügbare Items",
                             "§7Diese Items können je nach ihrer Wahrscheinlichkeit, beim Tod gedroppt werden.",
                             "§7Dieser BossEgg startet mit §c" + Util.formatBigNumber(bossEgg.getMaxHealth()) + " Herzen.",

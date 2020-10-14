@@ -47,6 +47,9 @@ public class Util {
         }
     }
 
+    public static boolean isBoolean(String s) {
+        return s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false");
+    }
 
     public static boolean isInt(String integer) {
         try {

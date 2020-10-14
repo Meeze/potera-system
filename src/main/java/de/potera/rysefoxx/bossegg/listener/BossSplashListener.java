@@ -2,7 +2,6 @@ package de.potera.rysefoxx.bossegg.listener;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -13,8 +12,6 @@ public class BossSplashListener implements Listener {
 
     @EventHandler
     public void onSplash(PotionSplashEvent e) {
-        if (!(e.getPotion().getShooter() instanceof Player)) return;
-
         Collection<LivingEntity> collection = e.getAffectedEntities();
         for (LivingEntity livingEntity : collection) {
             if (!(livingEntity instanceof Monster)) continue;

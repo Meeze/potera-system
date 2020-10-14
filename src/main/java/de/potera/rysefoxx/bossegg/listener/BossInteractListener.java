@@ -66,15 +66,17 @@ public class BossInteractListener implements Listener {
                 Bukkit.broadcastMessage("");
                 Bukkit.broadcastMessage("§c" + player.getName() + " §7hat ein Spawner-Ei aus der §c" + bossEgg.getCollection() + " Kollektion benutzt.");
                 Bukkit.broadcastMessage("");
-                Bukkit.broadcastMessage("§7Boss Name§8: §c" + bossEgg.getDisplayName());
-                Bukkit.broadcastMessage("§7Boss Leben§8: §c" + bossEgg.getMaxHealth());
+                Bukkit.broadcastMessage("§7Boss Name§8: §c" + bossEgg.getColoredName());
+                Bukkit.broadcastMessage("§7Boss Leben§8: §c" + bossEgg.getMaxHealth() + "❤");
                 Bukkit.broadcastMessage("§7X§8: §c" + e.getClickedBlock().getX());
                 Bukkit.broadcastMessage("§7Y§8: §c" + e.getClickedBlock().getY());
                 Bukkit.broadcastMessage("§7Z§8: §c" + e.getClickedBlock().getZ());
                 Bukkit.broadcastMessage("");
                 Bukkit.broadcastMessage("§6§l§k---------------------------");
             }
-        } else if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
+            return;
+        }
+        if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
 
             InventoryMenuBuilder inventoryMenuBuilder = new InventoryMenuBuilder().withSize(9 * 6).withTitle("§7BossEgg Informationen");
 
