@@ -11,6 +11,9 @@ import de.potera.realmeze.punishment.command.UnbanCommand;
 import de.potera.realmeze.punishment.command.UnmuteCommand;
 import de.potera.realmeze.punishment.controller.PunishmentController;
 import de.potera.realmeze.punishment.service.PunishmentService;
+import de.potera.realmeze.voucher.controller.VoucherController;
+import de.potera.realmeze.voucher.model.content.MoneyContent;
+import de.potera.realmeze.voucher.service.VoucherService;
 import de.potera.rysefoxx.bossegg.BossEggAbilities;
 import de.potera.rysefoxx.bossegg.BossEggCommand;
 import de.potera.rysefoxx.bossegg.BossEggManager;
@@ -74,6 +77,7 @@ public class Main extends JavaPlugin {
     private EnderChestManager enderChestManager;
 
     private PunishmentController punishmentController;
+    private VoucherController voucherController;
 
     private boolean shutdownDirectly = false;
 
@@ -162,6 +166,11 @@ public class Main extends JavaPlugin {
         this.punishmentController = new PunishmentController();
         punishmentController.setPunishmentService(new PunishmentService());
         this.punishmentController.init();
+        this.voucherController = new VoucherController();
+        voucherController.setVoucherService(new VoucherService());
+        MoneyContent moneyContent = new MoneyContent();
+        moneyContent.setAmount(1000);
+        Bukkit.broadcastMessage(voucherController.create(moneyContent).getItemMeta().getDisplayName());
         this.dailyPotManager = new DailyPotManager();
         this.tradeManager = new TradeManager();
         this.bossEggManager = new BossEggManager();
