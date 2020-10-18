@@ -30,7 +30,7 @@ public class Util {
     }
 
     public static boolean isOnCoolDown(UUID uuid) {
-        return coolDown.containsKey(uuid);
+        return coolDown.containsKey(uuid) && coolDown.get(uuid) > System.currentTimeMillis();
     }
 
     public static String formatNumber(double number) {
