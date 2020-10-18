@@ -108,6 +108,58 @@ public enum TimeUtils {
 
     }
 
+    public static String getTimeShort(long ends) {
+        long current = System.currentTimeMillis();
+        if (ends == -1L) {
+            return "§4∞";
+        }
+
+        long differenz = ends - current;
+
+        long seconds = 0L;
+        long minutes = 0L;
+        long hours = 0L;
+        long days = 0L;
+        long weeks = 0L;
+
+        while (differenz >= 1000L) {
+            differenz -= 1000L;
+            seconds++;
+        }
+        while (seconds >= 60L) {
+            seconds -= 60L;
+            minutes++;
+        }
+        while (minutes >= 60L) {
+            minutes -= 60L;
+            hours++;
+        }
+        while (hours >= 24) {
+            hours -= 24L;
+            days++;
+        }
+        while (days >= 7L) {
+            days -= 7L;
+            weeks++;
+        }
+
+        if (weeks > 0L) {
+            return weeks + " W " + (days > 0 ? days + " T" : "") + (hours > 0 ? hours + " S" : "") + (minutes > 0 ? minutes + " M" : "") + (seconds > 0 ? seconds + " S" : "");
+        }
+        if (days > 0L) {
+            return days + " T " + (hours > 0 ? hours + " S" : "") + (minutes > 0 ? minutes + " M" : "") + (seconds > 0 ? seconds + " S" : "");
+        }
+        if (hours > 0L) {
+            return hours + " S " + (minutes > 0 ? minutes + " M" : "") + (seconds > 0 ? seconds + " S" : "");
+        }
+        if (minutes > 0L) {
+            return minutes + " M " + (seconds > 0 ? seconds + " S" : "");
+        }
+
+        return seconds + " S";
+
+    }
+
     public static String shortInteger(int duration) {
 
         String string = "";

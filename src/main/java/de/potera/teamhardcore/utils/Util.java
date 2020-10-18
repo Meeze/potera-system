@@ -15,10 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Util {
@@ -26,6 +23,15 @@ public class Util {
     private static final Random random = new Random();
     private static final NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.GERMAN);
     private static final String[] moneyNames = new String[]{"Mrd.", "Bio.", "Brd.", "Trio."};
+    private static final HashMap<UUID, Long> coolDown = new HashMap<>();
+
+    public static void setCoolDown(UUID uuid) {
+        coolDown.put(uuid, (System.currentTimeMillis() + 1000L));
+    }
+
+    public static boolean isOnCoolDown(UUID uuid) {
+        return coolDown.containsKey(uuid);
+    }
 
     public static String formatNumber(double number) {
         return numberFormat.format(number);

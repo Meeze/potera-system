@@ -24,7 +24,7 @@ public class DailyPotCommand implements CommandExecutor {
                 return true;
             }
             if (!Main.getInstance().getDailyPotManager().canJoin()) {
-                player.sendMessage(StringDefaults.PREFIX + "§7Du bist zuspät! Der Dailypot wirde gerade ausgelost.");
+                player.sendMessage(StringDefaults.PREFIX + "§7Du bist zuspät! Der Dailypot wird gerade ausgelost.");
                 return true;
             }
             Main.getInstance().getDailyPotManager().addPlayer(player);

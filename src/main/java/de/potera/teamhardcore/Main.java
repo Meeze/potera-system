@@ -175,6 +175,7 @@ public class Main extends JavaPlugin {
 
         PluginManager pm = Bukkit.getPluginManager();
 
+        getCommand("crate").setExecutor(new CrateCommand());
         getCommand("automute").setExecutor(new AutoMuteCommand());
         getCommand("teleport").setExecutor(new TeleportCommand());
         getCommand("enderchest").setExecutor(new EnderChestCommand());

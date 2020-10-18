@@ -45,7 +45,7 @@ public class WarnCommand implements CommandExecutor {
                 return true;
             }
             if (!Util.isInt(args[1])) {
-                player.sendMessage(StringDefaults.PREFIX + "§7Bitte gibt eine valide Zahl ein!");
+                player.sendMessage(StringDefaults.PREFIX + "§7Bitte gib eine valide Zahl ein!");
                 return true;
             }
             User userTarget = Main.getInstance().getUserManager().getUser(target.getUniqueId());

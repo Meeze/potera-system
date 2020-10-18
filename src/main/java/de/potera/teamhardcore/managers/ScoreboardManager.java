@@ -1,5 +1,6 @@
 package de.potera.teamhardcore.managers;
 
+import de.potera.rysefoxx.utils.TimeUtils;
 import de.potera.teamhardcore.Main;
 import de.potera.teamhardcore.others.EnumLiga;
 import de.potera.teamhardcore.users.User;
@@ -87,22 +88,27 @@ public class ScoreboardManager {
             Team teamPoints = board.registerNewTeam("Internal_Points");
             Team teamNextLevel = board.registerNewTeam("Internal_NL");
             Team teamNLText = board.registerNewTeam("Internal_NLText");
+            Team teamTime = board.registerNewTeam("Internal_Time");
 
             teamLevel.addEntry("§7");
             teamPoints.addEntry("§7§7");
             teamNextLevel.addEntry("§7§7§7§7");
             teamNLText.addEntry("§c§lNächstes ");
             teamNLText.setSuffix("Level");
+            teamTime.addEntry("§7§7§7§7§7");
 
-            sidebar.getScore(" ").setScore(8);
-            sidebar.getScore("§3§lMine-Level").setScore(7);
-            sidebar.getScore("§7").setScore(6);
-            sidebar.getScore("  ").setScore(5);
-            sidebar.getScore("§a§lMinePunkte").setScore(4);
-            sidebar.getScore("§7§7").setScore(3);
-            sidebar.getScore("   ").setScore(2);
-            sidebar.getScore("§c§lNächstes ").setScore(1);
-            sidebar.getScore("§7§7§7§7").setScore(0);
+            sidebar.getScore(" ").setScore(11);
+            sidebar.getScore("§3§lMine-Level").setScore(10);
+            sidebar.getScore("§7").setScore(9);
+            sidebar.getScore("  ").setScore(8);
+            sidebar.getScore("§a§lMinePunkte").setScore(7);
+            sidebar.getScore("§7§7").setScore(6);
+            sidebar.getScore("   ").setScore(5);
+            sidebar.getScore("§c§lNächstes ").setScore(4);
+            sidebar.getScore("§7§7§7§7").setScore(3);
+            sidebar.getScore("").setScore(2);
+            sidebar.getScore("§5§lTime").setScore(1);
+            sidebar.getScore("§7§7§7§7§7").setScore(0);
         }
 
         updateSidebar(p);
@@ -129,6 +135,7 @@ public class ScoreboardManager {
             board.getTeam("Internal_Points").unregister();
             board.getTeam("Internal_NL").unregister();
             board.getTeam("Internal_NLText").unregister();
+            board.getTeam("Internal_Time").unregister();
         }
     }
 
@@ -238,6 +245,8 @@ public class ScoreboardManager {
             Team teamLevel = board.getTeam("Internal_Level");
             Team teamPoints = board.getTeam("Internal_Points");
             Team teamNextLevel = board.getTeam("Internal_NL");
+            Team teamTime = board.getTeam("Internal_Time");
+
 
             UserMine userMine = Main.getInstance().getUserManager().getUser(forWhom.getUniqueId()).getUserMine();
 
@@ -246,6 +255,8 @@ public class ScoreboardManager {
 
             String nextLevel = (userMine.getMinePoints() >= pointsNextLevel) ? null : Util.formatBigNumber(
                     pointsNextLevel);
+
+            teamTime.setSuffix(TimeUtils.getTimeShort(userMine.getAvailableTime()));
 
             teamLevel.setSuffix(userMine.getLevel() + "");
             teamPoints.setSuffix(points);

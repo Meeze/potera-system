@@ -38,13 +38,13 @@ public class TeleportCommand implements CommandExecutor {
                 y = Integer.parseInt(args[2]);
                 z = Integer.parseInt(args[3]);
             } catch (NumberFormatException e) {
-                player.sendMessage(StringDefaults.PREFIX + "Bitte gib eine valide Zahl ein!");
+                player.sendMessage(StringDefaults.PREFIX + "§cBitte gib eine valide Zahl ein!");
                 return true;
             }
 
             target.teleport(new Location(target.getWorld(), x, y, z));
-            player.sendMessage(StringDefaults.PREFIX + "Du hast §c" + target.getName() + " §7zu den Koordinaten §c" + x + "§8, §c" + y + "§8, §c" + z + " §7teleportiert.");
-            target.sendMessage(StringDefaults.PREFIX + "Du wurdest zu den Koordinaten §8<§a" + x + "§8|§a" + y + "§8|§a" + z + "§8> §7teleportiert.");
+            player.sendMessage(StringDefaults.PREFIX + "§7Du hast §c" + target.getName() + " §7zu den Koordinaten §c" + x + "§8, §c" + y + "§8, §c" + z + " §7teleportiert.");
+            target.sendMessage(StringDefaults.PREFIX + "§7Du wurdest zu den Koordinaten §8<§a" + x + "§8|§a" + y + "§8|§a" + z + "§8> §7teleportiert.");
 
 
         } else if (args.length == 2) {
@@ -56,7 +56,7 @@ public class TeleportCommand implements CommandExecutor {
                 }
                 player.teleport(target);
 
-                player.sendMessage(StringDefaults.PREFIX + "Du hast dich zu §c" + target.getName() + " §7teleportiert.");
+                player.sendMessage(StringDefaults.PREFIX + "§7Du hast dich zu §c" + target.getName() + " §7teleportiert.");
                 if (!Main.getInstance().getGeneralManager().getPlayersInVanish().contains(player)) {
                     target.sendMessage(StringDefaults.PREFIX + "§c" + player.getName() + " §7hat sich zu dir teleportiert.");
                 }
@@ -68,8 +68,8 @@ public class TeleportCommand implements CommandExecutor {
                     return true;
                 }
                 target.teleport(player);
-                target.sendMessage(StringDefaults.PREFIX + "Du wurdest zu §c" + player.getName() + " §7teleportiert.");
-                player.sendMessage(StringDefaults.PREFIX + "Du hast §c" + target.getName() + " §7erfolgreich zu dir teleportiert.");
+                target.sendMessage(StringDefaults.PREFIX + "§7Du wurdest zu §c" + player.getName() + " §7teleportiert.");
+                player.sendMessage(StringDefaults.PREFIX + "§7Du hast §c" + target.getName() + " §7erfolgreich zu dir teleportiert.");
 
 
             } else {
@@ -80,7 +80,7 @@ public class TeleportCommand implements CommandExecutor {
                     return true;
                 }
                 player1.teleport(target);
-                player1.sendMessage(StringDefaults.PREFIX + "Du wurdest zu §c" + target.getName() + " §7teleportiert.");
+                player1.sendMessage(StringDefaults.PREFIX + "§7Du wurdest zu §c" + target.getName() + " §7teleportiert.");
                 target.sendMessage(StringDefaults.PREFIX + "§c" + player1.getName() + " §7wurde zu dir teleportiert.");
             }
 
@@ -91,7 +91,7 @@ public class TeleportCommand implements CommandExecutor {
                 return true;
             }
             player.teleport(target);
-            player.sendMessage(StringDefaults.PREFIX + "Du hast dich zu §c" + target.getName() + " §7teleportiert.");
+            player.sendMessage(StringDefaults.PREFIX + "§7Du hast dich zu §c" + target.getName() + " §7teleportiert.");
         }
 
 

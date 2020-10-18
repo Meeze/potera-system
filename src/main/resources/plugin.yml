@@ -6,6 +6,7 @@ main: de.potera.teamhardcore.Main
 depend: [ WorldGuard,WGRegionEvents,ProtocolLib,WorldEdit,FastAsyncWorldEdit,LuckPerms, Multiverse-Core ]
 
 commands:
+  crate:
   automute:
   teleport:
     aliases:
@@ -20,6 +21,7 @@ commands:
   trash:
     aliases:
       - abfall
+      - mux
   clear:
   broadcast:
   chatclear:

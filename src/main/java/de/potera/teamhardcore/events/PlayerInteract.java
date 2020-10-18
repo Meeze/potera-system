@@ -168,6 +168,11 @@ public class PlayerInteract implements Listener {
 
             if (Main.getInstance().getCrateManager().getPlayersInOpening().containsKey(player)) return;
 
+            if (Util.isOnCoolDown(player.getUniqueId())) {
+                player.sendMessage(StringDefaults.PREFIX + "§7Bitte warte einen Moment.");
+                return;
+            }
+
             String crateName = item.getItemMeta().getDisplayName().replace(" ", "");
             BaseCrate crate = Main.getInstance().getCrateManager().getCrate(ChatColor.stripColor(crateName));
             if (crate == null || crate.isDisabled()) return;
@@ -185,6 +190,8 @@ public class PlayerInteract implements Listener {
 
             CrateOpening opening = new CrateOpening(player, crate, skip);
             if (!skip) Main.getInstance().getCrateManager().getPlayersInOpening().put(player, opening);
+
+            Util.setCoolDown(player.getUniqueId());
         }
 
     }

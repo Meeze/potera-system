@@ -27,12 +27,12 @@ public class PvPCommand implements CommandExecutor {
             for (World world : Bukkit.getWorlds()) {
                 world.setPVP(false);
             }
-            Bukkit.broadcastMessage(StringDefaults.PVP_PREFIX + "§7PvP wurde in allen Welten deaktiviert.");
+            Bukkit.broadcastMessage(StringDefaults.PVP_PREFIX + "§7PvP wurde in allen Welten §cdeaktiviert.");
         } else {
             for (World world : Bukkit.getWorlds()) {
                 world.setPVP(true);
             }
-            Bukkit.broadcastMessage(StringDefaults.PVP_PREFIX + "§7PvP wurde in allen Welten aktiviert.");
+            Bukkit.broadcastMessage(StringDefaults.PVP_PREFIX + "§7PvP wurde in allen Welten §aaktiviert.");
         }
 
         return false;

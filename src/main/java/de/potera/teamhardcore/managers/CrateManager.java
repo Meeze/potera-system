@@ -2,7 +2,7 @@ package de.potera.teamhardcore.managers;
 
 import de.potera.teamhardcore.others.crates.BaseCrate;
 import de.potera.teamhardcore.others.crates.CrateOpening;
-import de.potera.teamhardcore.others.crates.addons.TestCrate;
+import de.potera.teamhardcore.others.crates.addons.*;
 import de.potera.teamhardcore.utils.StringDefaults;
 import org.bukkit.entity.Player;
 
@@ -23,6 +23,10 @@ public class CrateManager {
     private void loadCrates() {
         this.availableCrates.clear();
         this.availableCrates.put("TestCrate", new BaseCrate(new TestCrate()));
+        this.availableCrates.put("OrbitCrate", new BaseCrate(new OrbitCrate()));
+        this.availableCrates.put("PremiumCrate", new BaseCrate(new PremiumCrate()));
+        this.availableCrates.put("LuxCrate", new BaseCrate(new LuxCrate()));
+        this.availableCrates.put("WaterCrate", new BaseCrate(new WaterCrate()));
     }
 
     public BaseCrate getCrate(String name) {

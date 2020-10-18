@@ -26,13 +26,18 @@ public class TeamCommand implements CommandExecutor {
         Player player = (Player) sender;
 
 
+        if (!player.hasPermission("potera.team")) {
+            player.sendMessage(StringDefaults.NO_PERM);
+            return true;
+        }
+
         if (args.length == 0) {
-            InventoryMenuBuilder inventoryMenuBuilder = new InventoryMenuBuilder().withSize(9 * 5).withTitle("§7Potera Team");
+            InventoryMenuBuilder inventoryMenuBuilder = new InventoryMenuBuilder().withSize(9 * 5).withTitle(StringDefaults.INVENTORY_PREFIX + "Team");
             Util.fill(inventoryMenuBuilder.getInventory(), 9 * 5);
-            inventoryMenuBuilder.withItem(12, new ItemBuilder(Material.WOOL).setDurability((short) 15).setDisplayName("§4Owner").setLore(Arrays.asList(
+            inventoryMenuBuilder.withItem(12, new ItemBuilder(Material.CLAY).setDurability((short) 14).setDisplayName("§4Owner").setLore(Arrays.asList(
                     "",
                     Main.getPlugin(Main.class).getTeamManager().getOwner())).build());
-            inventoryMenuBuilder.withItem(14, new ItemBuilder(Material.WOOL).setDurability((short) 14).setDisplayName("§cAdmin").setLore(Arrays.asList(
+            inventoryMenuBuilder.withItem(14, new ItemBuilder(Material.CLAY).setDurability((short) 6).setDisplayName("§cAdmin").setLore(Arrays.asList(
                     "",
                     Main.getPlugin(Main.class).getTeamManager().getAdmin())).build());
             inventoryMenuBuilder.withItem(29, new ItemBuilder(Material.WOOL).setDurability((short) 3).setDisplayName("§bDeveloper").setLore(Arrays.asList(
@@ -53,10 +58,6 @@ public class TeamCommand implements CommandExecutor {
             inventoryMenuBuilder.withEventHandler(event -> event.setCancelled(true));
             inventoryMenuBuilder.show(player);
         } else if (args.length == 3) {
-            if (!player.hasPermission("potera.team")) {
-                player.sendMessage(StringDefaults.NO_PERM);
-                return true;
-            }
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
             if (args[0].equalsIgnoreCase("add")) {
                 if (Main.getInstance().getTeamManager().inGroup(target)) {
@@ -74,7 +75,7 @@ public class TeamCommand implements CommandExecutor {
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("remove")) {
-                OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]); 
+                OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
                 if (!Main.getInstance().getTeamManager().inGroup(target)) {
                     player.sendMessage(StringDefaults.PREFIX + "§7Dieser Spieler befindet sich in keiner Gruppe.");
                     return true;
