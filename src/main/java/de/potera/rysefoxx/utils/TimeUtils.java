@@ -218,4 +218,46 @@ public enum TimeUtils {
 
     }
 
+    public static String shortIntegerWithText(int duration) {
+
+        int days = 0;
+        int hours = 0;
+        int minutes = 0;
+        int seconds = 0;
+
+        if (duration / 60 / 60 / 24 >= 1) {
+            days = duration / 60 / 60 / 24;
+            duration = duration - ((duration / 60 / 60 / 24) * 60 * 60 * 24);
+        }
+
+        if (duration / 60 / 60 >= 1) {
+            hours = duration / 60 / 60;
+            duration = duration - ((duration / 60 / 60) * 60 * 60);
+        }
+
+        if (duration / 60 >= 1) {
+            minutes = duration / 60;
+            duration = duration - ((duration / 60) * 60);
+        }
+
+        if (duration >= 1) {
+            seconds = duration;
+        }
+
+
+        if (days > 0L) {
+            return days + (days > 1 ? " Tage" : " Tag") + (hours > 0? hours+ " Stunden" : " Stunde") +  (minutes > 0 ? minutes+ " Minuten" : " Minute") +  (seconds > 0 ? seconds+ " Sekunden" : " Sekunde");
+        }
+        if (hours > 0L) {
+            return hours + (hours > 1 ? " Stunden" : " Stunde")+(minutes > 0 ? minutes+ " Minuten" : " Minute") + (seconds > 0 ? seconds+ " Sekunden" : " Sekunde");
+        }
+        if (minutes > 0L) {
+            return minutes + (minutes > 1 ? " Minuten" : " Minute")+(seconds > 0 ? seconds + " Sekunden" : "");
+        }
+
+        return seconds + (seconds > 1 ? " Sekunden" : " Sekunde");
+
+
+    }
+
 }

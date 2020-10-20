@@ -4,20 +4,29 @@ import de.potera.realmeze.punishment.controller.PunishmentController;
 import de.potera.realmeze.punishment.event.PunishListener;
 import de.potera.realmeze.punishment.model.Punishment;
 import de.potera.realmeze.punishment.model.PunishmentType;
+import de.potera.rysefoxx.fanciful.FancyMessage;
+import de.potera.rysefoxx.utils.Enchants;
+import de.potera.rysefoxx.utils.RomanNumber;
 import de.potera.rysefoxx.utils.StringSimilarity;
+import de.potera.rysefoxx.utils.TimeUtils;
 import de.potera.teamhardcore.Main;
 import de.potera.teamhardcore.others.Support;
 import de.potera.teamhardcore.others.clan.Clan;
 import de.potera.teamhardcore.others.clan.ClanMember;
 import de.potera.teamhardcore.users.UserData;
 import de.potera.teamhardcore.utils.StringDefaults;
+import de.potera.teamhardcore.utils.Util;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -107,6 +116,7 @@ public class AsyncPlayerChat implements PunishListener {
             return;
         }
 
+
         if (message.startsWith("#") && Main.getInstance().getClanManager().hasClan(player.getUniqueId())) {
             message = message.substring(1);
             message = message.trim();
@@ -157,6 +167,61 @@ public class AsyncPlayerChat implements PunishListener {
             return;
         }
 
+
+        if (ChatColor.stripColor(message).startsWith("[item]") || ChatColor.stripColor(message).startsWith("[i]") && player.hasPermission("potera.item.post")) {
+            if (!Main.getPlugin(Main.class).getItemManager().isActive()) {
+                event.setCancelled(true);
+                player.sendMessage(StringDefaults.PREFIX + "§cDu kannst derzeit kein Item verlinken.");
+                return;
+            }
+            if (!Main.getPlugin(Main.class).getItemManager().canUse(player)) {
+                event.setCancelled(true);
+                player.sendMessage(StringDefaults.PREFIX + "§7Du musst noch §c" + TimeUtils.getTime(Main.getPlugin(Main.class).getItemManager().getPlayerCoolDown(player)) + " §7warten.");
+                return;
+            }
+            Main.getPlugin(Main.class).getItemManager().setPlayerCoolDown(player, Main.getPlugin(Main.class).getItemManager().getCoolDown());
+
+
+            if (Util.hasItemInHand(player)) {
+                event.setCancelled(true);
+                ItemStack itemInHand = player.getItemInHand();
+                String displayName;
+                List<String> lore = new ArrayList<>();
+                if (itemInHand.hasItemMeta() && itemInHand.getItemMeta().hasDisplayName()) {
+                    displayName = itemInHand.getItemMeta().getDisplayName();
+                } else {
+                    displayName = CraftItemStack.asNMSCopy(itemInHand).getName();
+                }
+                if (itemInHand.getItemMeta().hasLore()) {
+                    for (int i = 0; i < itemInHand.getItemMeta().getLore().size(); i++) {
+                        lore.add(i, itemInHand.getItemMeta().getLore().get(i));
+                    }
+                    lore.add(0, "§6§l" + displayName);
+                }
+                if (itemInHand.getItemMeta().hasEnchants()) {
+                    lore.add(0, "§b" + displayName);
+                    Map<Enchantment, Integer> enchant = itemInHand.getItemMeta().getEnchants();
+                    for (Map.Entry<Enchantment, Integer> enchantment : enchant.entrySet()) {
+                        lore.add("§7" + Objects.requireNonNull(Enchants.forName(enchantment.getKey().getName())).getGoodName() + " " + RomanNumber.toRoman(enchantment.getValue()));
+                    }
+                }
+
+                //Todo: CHANGE FANCYMESSAGE FORMAT WITH END FORMAT. (event.getFormat());
+
+
+                FancyMessage fancyMessage = new FancyMessage().text("<" + player.getName() + "> §8[§a" + displayName + "§8] §r" + message.replace("[item]", "")).tooltip(lore);
+                for (Player all : Bukkit.getOnlinePlayers()) {
+                    fancyMessage.send(all);
+                }
+
+            } else {
+                event.setCancelled(true);
+                player.sendMessage(StringDefaults.PREFIX + "§7Bitte halte ein Item in der Hand.");
+                return;
+            }
+
+
+        }
 
         if (!player.hasPermission("potera.settings.bypass")) {
             Set<Player> toRemove = null;

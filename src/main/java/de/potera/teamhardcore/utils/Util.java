@@ -43,6 +43,10 @@ public class Util {
         return calculateBigFormat((number / 1000000L), 0);
     }
 
+    public static boolean hasItemInHand(Player player) {
+        return (player.getItemInHand() != null && player.getItemInHand().getType() != Material.AIR);
+    }
+
     public static boolean getChance(double d) {
         return ThreadLocalRandom.current().nextDouble() * 100.0D <= d;
     }

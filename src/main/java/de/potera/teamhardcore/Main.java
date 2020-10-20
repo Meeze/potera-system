@@ -16,10 +16,7 @@ import de.potera.rysefoxx.bossegg.BossEggCommand;
 import de.potera.rysefoxx.bossegg.BossEggManager;
 import de.potera.rysefoxx.bossegg.BossEggSerializer;
 import de.potera.rysefoxx.commands.*;
-import de.potera.rysefoxx.manager.AutoMuteManager;
-import de.potera.rysefoxx.manager.DailyPotManager;
-import de.potera.rysefoxx.manager.EnderChestManager;
-import de.potera.rysefoxx.manager.TeamManager;
+import de.potera.rysefoxx.manager.*;
 import de.potera.rysefoxx.menubuilder.manager.InventoryListener;
 import de.potera.rysefoxx.menubuilder.manager.MenuBuilderPlugin;
 import de.potera.rysefoxx.trade.TradeCommand;
@@ -74,6 +71,7 @@ public class Main extends JavaPlugin {
     private TeamManager teamManager;
     private EnderChestManager enderChestManager;
     private AutoMuteManager autoMuteManager;
+    private ItemManager itemManager;
 
     private PunishmentController punishmentController;
 
@@ -172,9 +170,11 @@ public class Main extends JavaPlugin {
         this.teamManager = new TeamManager();
         this.enderChestManager = new EnderChestManager();
         this.autoMuteManager = new AutoMuteManager();
+        this.itemManager = new ItemManager();
 
         PluginManager pm = Bukkit.getPluginManager();
 
+        getCommand("item").setExecutor(new ItemCommand());
         getCommand("crate").setExecutor(new CrateCommand());
         getCommand("automute").setExecutor(new AutoMuteCommand());
         getCommand("teleport").setExecutor(new TeleportCommand());
