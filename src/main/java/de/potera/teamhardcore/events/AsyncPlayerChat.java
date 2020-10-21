@@ -179,10 +179,10 @@ public class AsyncPlayerChat implements PunishListener {
                 player.sendMessage(StringDefaults.PREFIX + "§7Du musst noch §c" + TimeUtils.getTime(Main.getPlugin(Main.class).getItemManager().getPlayerCoolDown(player)) + " §7warten.");
                 return;
             }
-            Main.getPlugin(Main.class).getItemManager().setPlayerCoolDown(player, Main.getPlugin(Main.class).getItemManager().getCoolDown());
 
 
             if (Util.hasItemInHand(player)) {
+                Main.getPlugin(Main.class).getItemManager().setPlayerCoolDown(player, Main.getPlugin(Main.class).getItemManager().getCoolDown());
                 event.setCancelled(true);
                 ItemStack itemInHand = player.getItemInHand();
                 String displayName;
